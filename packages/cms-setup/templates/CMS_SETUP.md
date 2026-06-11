@@ -70,8 +70,12 @@ The components use Tailwind classes plus a small set of CSS variables. Either:
 - define the `--ink`, `--ink-muted`, `--accent-*`, `--surface-*` variables in your
   own theme.
 
-Add the package sources to Tailwind content scanning in your main CSS file:
+Add the package sources to Tailwind content scanning in your main CSS file (adjust the path for your checkout layout):
 
 ```css
-@source "../../packages/cms-react/src";
+/* Sibling repo next to the campaign site */
+@source "../../../campaign-cms/packages/cms-react/src";
+
+/* Or, if installed only via node_modules file: link */
+@source "../../node_modules/@campaign/cms-react/src";
 ```
