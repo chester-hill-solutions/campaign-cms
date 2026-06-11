@@ -65,16 +65,12 @@ import { BlockRenderer, CmsUiProvider } from '@campaign/cms-react'
 
 ## Example
 
-**[examples/minimal-site](./examples/minimal-site/)** — a stripped-down TanStack Start app with one seeded CMS page, public rendering, and an admin editor route (no auth — for learning only).
+**[examples/minimal-site](./examples/minimal-site/)** — opens the page builder at `/` with a seeded campaign About page (D1 + autosave + publish). No auth.
 
 ```bash
-cd examples/minimal-site
-npm install
-npm run setup:local
-npm run seed:local
-npm run dev
-# → http://localhost:3000/about  (public page)
-# → http://localhost:3000/admin/pages/page-about  (editor)
+npm run example:setup && npm run example:seed && npm run example:dev
+# → http://localhost:3001/          (editor)
+# → http://localhost:3001/about      (published preview, after Publish)
 ```
 
 Production reference: [frank-domenic](https://github.com/chester-hill-solutions/frank-domenic) (private campaign site using these packages).

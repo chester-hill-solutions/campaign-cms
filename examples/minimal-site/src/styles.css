@@ -4,10 +4,38 @@
 @import "@campaign/cms-react/styles/cms-tokens.css";
 
 @theme {
-  --color-ink: var(--ink);
-  --color-ink-muted: var(--ink-muted);
-  --color-accent-orange: var(--accent-orange);
-  --color-surface-page: var(--surface-page);
-  --color-line-strong: var(--line-strong);
   --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Minimal hero layout for the demo (production sites customize further). */
+.hero-block__grid {
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.hero-block__portrait {
+  position: relative;
+}
+
+.hero-block__figure--mobile-first {
+  order: -1;
+}
+
+@container (min-width: 28rem) {
+  .hero-block__grid--image-right {
+    grid-template-columns: 1fr min(42%, 22rem);
+  }
+
+  .hero-block__grid--image-left {
+    grid-template-columns: min(42%, 22rem) 1fr;
+  }
+
+  .hero-block__grid--image-left .hero-block__figure {
+    order: -1;
+  }
+
+  .hero-block__figure--mobile-first {
+    order: unset;
+  }
 }

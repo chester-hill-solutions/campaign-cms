@@ -125,7 +125,7 @@ export function BlockTypeSettings({ block, onChange }: SettingsProps) {
           </PanelSection>
           <PanelSection title="Card images">
             {block.cards.map((card, index) => (
-              <details key={card.id} className="rounded-lg border border-border-subtle p-2">
+              <details key={card.id} className="rounded-lg border border-border-subtle bg-surface-elevated p-2">
                 <summary className="cursor-pointer text-xs font-semibold text-ink">
                   {card.title || `Card ${index + 1}`}
                 </summary>
@@ -188,7 +188,7 @@ export function BlockTypeSettings({ block, onChange }: SettingsProps) {
       return (
         <PanelSection title="Section images">
           {block.sections.map((section, index) => (
-            <details key={section.id} className="rounded-lg border border-border-subtle p-2">
+            <details key={section.id} className="rounded-lg border border-border-subtle bg-surface-elevated p-2">
               <summary className="cursor-pointer text-xs font-semibold text-ink">
                 {section.title || `Section ${index + 1}`}
               </summary>

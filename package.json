@@ -19,7 +19,10 @@
   ],
   "scripts": {
     "test": "npm run test --workspaces --if-present",
-    "typecheck": "npm run typecheck --workspaces --if-present"
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "example:setup": "npm run setup:local -w campaign-cms-minimal-site",
+    "example:seed": "npm run seed:local -w campaign-cms-minimal-site",
+    "example:dev": "npm run dev -w campaign-cms-minimal-site"
   },
   "overrides": {
     "react": "$react",

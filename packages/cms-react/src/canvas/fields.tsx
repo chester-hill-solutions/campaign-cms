@@ -77,7 +77,7 @@ export function CtaFields({
   onChange: (cta: BlockCta | undefined) => void
 }) {
   return (
-    <fieldset className="m-0 grid gap-2 rounded-lg border border-border-subtle p-2.5">
+    <fieldset className="m-0 grid gap-2 rounded-lg border border-border-subtle bg-surface-elevated p-2.5">
       <legend className="px-1 text-xs font-semibold text-ink-muted">{label}</legend>
       <AdminTextInput
         label="Label"

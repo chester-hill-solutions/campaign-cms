@@ -26,7 +26,7 @@ Import the package defaults:
 @import "@campaign/cms-react/styles/cms-tokens.css";
 ```
 
-Or define variables yourself in `@theme`:
+`cms-tokens.css` also registers those variables with Tailwind v4 (`@theme`) so utilities like `bg-surface-card` and `border-border-subtle` are generated automatically.
 
 | Variable | Default role |
 |----------|--------------|
@@ -37,6 +37,8 @@ Or define variables yourself in `@theme`:
 | `--accent-green` | Success |
 | `--surface-page` | Page background |
 | `--surface-card` | Card backgrounds |
+| `--surface-elevated` | Raised cards / panels |
+| `--surface-card-strong` | Secondary button fills |
 | `--line-strong` | Borders |
 
 ## Host theme overrides
@@ -50,14 +52,7 @@ Override in your site's CSS after importing tokens:
 }
 ```
 
-Map to Tailwind colors:
-
-```css
-@theme {
-  --color-ink: var(--ink);
-  --color-accent-orange: var(--accent-orange);
-}
-```
+Add host-only `@theme` entries (fonts, extra colors) in your stylesheet — CMS color utilities pick up `:root` overrides automatically.
 
 ## Editor chrome
 

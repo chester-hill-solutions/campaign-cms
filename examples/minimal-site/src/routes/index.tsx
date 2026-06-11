@@ -1,7 +1,7 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
+
+import { PageEditor } from '../pages/PageEditor'
 
 export const Route = createFileRoute('/')({
-  beforeLoad: () => {
-    throw redirect({ to: '/about' })
-  },
+  component: PageEditor,
 })

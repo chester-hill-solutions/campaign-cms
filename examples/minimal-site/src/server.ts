@@ -1,7 +1,7 @@
 import handler from '@tanstack/react-start/server-entry'
 
 export default {
-  async fetch(request: Request, env: unknown, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url)
 
     if (url.pathname.startsWith('/media/')) {
@@ -14,6 +14,6 @@ export default {
       }
     }
 
-    return handler.fetch(request, env, ctx)
+    return handler.fetch(request)
   },
 }

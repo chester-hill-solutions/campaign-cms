@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AdminPagesEntryIdRouteImport } from './routes/admin.pages.$entryId'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -23,40 +22,31 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminPagesEntryIdRoute = AdminPagesEntryIdRouteImport.update({
-  id: '/admin/pages/$entryId',
-  path: '/admin/pages/$entryId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin/pages/$entryId': typeof AdminPagesEntryIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin/pages/$entryId': typeof AdminPagesEntryIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin/pages/$entryId': typeof AdminPagesEntryIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/admin/pages/$entryId'
+  fullPaths: '/' | '/about'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/admin/pages/$entryId'
-  id: '__root__' | '/' | '/about' | '/admin/pages/$entryId'
+  to: '/' | '/about'
+  id: '__root__' | '/' | '/about'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminPagesEntryIdRoute: typeof AdminPagesEntryIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,20 +65,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/pages/$entryId': {
-      id: '/admin/pages/$entryId'
-      path: '/admin/pages/$entryId'
-      fullPath: '/admin/pages/$entryId'
-      preLoaderRoute: typeof AdminPagesEntryIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminPagesEntryIdRoute: AdminPagesEntryIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

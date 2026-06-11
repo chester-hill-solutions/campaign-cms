@@ -1,10 +1,6 @@
 # Minimal site example
 
-A runnable TanStack Start app demonstrating Campaign CMS with:
-
-- D1-backed `pageDoc` storage
-- Public block rendering at `/about`
-- Admin page builder at `/admin/pages/page-about` (**no auth — demo only**)
+A runnable TanStack Start app with a single page editor at `/` — the fastest way to try Campaign CMS.
 
 ## Prerequisites
 
@@ -17,40 +13,41 @@ From the **campaign-cms repo root**:
 
 ```bash
 npm install
-cd examples/minimal-site
+npm run example:setup
+npm run example:seed
+npm run example:dev    # http://localhost:3001
+```
+
+Or from `examples/minimal-site`:
+
+```bash
 npm install
-npm run setup:local    # apply D1 migrations locally
-npm run seed:local     # insert sample About page
+npm run setup:local
+npm run seed:local
 npm run dev            # http://localhost:3001
 ```
 
-## URLs
+## What you get
 
-| URL | Purpose |
-|-----|---------|
-| http://localhost:3001/about | Public CMS page |
-| http://localhost:3001/admin/pages/page-about | Page builder (unauthenticated) |
+Open **http://localhost:3001** — a seeded campaign About page in the page builder:
+
+- Drag-and-drop blocks, inline editing, block settings panel
+- Page settings drawer (SEO, slug, nav)
+- Autosave to local D1, publish button
+- Desktop / mobile width preview toggle
+
+**No authentication** — this is a local demo only.
+
+Published preview (after hitting Publish): **http://localhost:3001/about**
 
 ## What to read in the source
 
 | File | Shows |
 |------|-------|
+| `src/pages/PageEditor.tsx` | Editor wiring — canvas, autosave, publish, drawers |
 | `src/lib/cms/content.server.ts` | `createCmsStore` wiring |
-| `src/lib/cms/cmsPagePath.ts` | Reserved slug prefixes |
-| `src/lib/cms/pageDocEntry.ts` | SEO defaults for new pages |
+| `scripts/seed-about.json` | Sample pageDoc payload (hero uses Unsplash stock photos) |
+| `src/lib/cms/stockImages.ts` | Demo portrait / background / placeholder URLs |
 | `src/server/cmsFns.ts` | TanStack `createServerFn` wrappers |
-| `src/server.ts` | `/media/*` R2 streaming |
-| `src/pages/PageDocPage.tsx` | Public `BlockRenderer` |
-| `src/routes/admin.pages.$entryId.tsx` | Editor canvas + autosave + publish |
-
-## Production checklist
-
-Before deploying a real campaign site:
-
-1. Add admin authentication and CSRF (see [admin editor guide](../../docs/guides/admin-editor.md))
-2. Replace direct server fn calls with authenticated wrappers
-3. Add `mediaApi` to `CmsUiProvider` for image uploads
-4. Register [app blocks](../../docs/guides/app-blocks.md) for forms, events, donate
-5. Use a catch-all route (`routes/$.tsx`) instead of a fixed `/about` route
 
 Reference production site: [frank-domenic](https://github.com/chester-hill-solutions/frank-domenic).

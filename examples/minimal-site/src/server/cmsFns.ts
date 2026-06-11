@@ -1,5 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 
+import type { PageDocPayload } from '@campaign/cms-core'
+
 import {
   getPageDocEditorState,
   getPublishedPageDocBySlug,
@@ -8,17 +10,20 @@ import {
 } from '../lib/cms/content.server'
 
 export const loadPublicPageFn = createServerFn({ method: 'GET' })
-  .validator((slug: string) => slug)
+  .inputValidator((slug: string) => slug)
   .handler(async ({ data: slug }) => getPublishedPageDocBySlug(slug))
 
 export const loadEditorStateFn = createServerFn({ method: 'GET' })
-  .validator((entryId: string) => entryId)
+  .inputValidator((entryId: string) => entryId)
   .handler(async ({ data: entryId }) => getPageDocEditorState(entryId))
 
 export const saveDraftFn = createServerFn({ method: 'POST' })
-  .validator((input: { entryId: string; payload: unknown }) => input)
-  .handler(async ({ data }) => savePageDocDraft(data.entryId, data.payload))
+  .inputValidator((input: { entryId: string; payload: PageDocPayload }) => input)
+  .handler(async ({ data }) => {
+    const { kind: _k, version: _v, ...content } = data.payload
+    return savePageDocDraft(data.entryId, content)
+  })
 
 export const publishPageFn = createServerFn({ method: 'POST' })
-  .validator((entryId: string) => entryId)
+  .inputValidator((entryId: string) => entryId)
   .handler(async ({ data: entryId }) => publishEntry(entryId))

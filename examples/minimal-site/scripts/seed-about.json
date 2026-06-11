@@ -1,0 +1,108 @@
+{
+  "kind": "pageDoc",
+  "version": 1,
+  "slug": "about",
+  "title": "About Jordan",
+  "dek": "Community organizer, public school advocate, and lifelong resident.",
+  "enabled": 1,
+  "showInNav": 1,
+  "navLabel": "About",
+  "seoTitle": "About Jordan | For Ward 3",
+  "seoDescription": "Meet Jordan Ellis — running to bring accountable leadership and practical solutions to Ward 3.",
+  "blocks": [
+    {
+      "id": "blk_hero",
+      "type": "hero",
+      "layout": {
+        "width": "contained",
+        "background": "brand-gradient",
+        "spacing": "normal",
+        "align": "left"
+      },
+      "kicker": "Meet Jordan",
+      "heading": "A neighbor who shows up",
+      "subhead": "Jordan has spent fifteen years organizing around housing, schools, and transit — not as a talking point, but as daily work.",
+      "primaryCta": {
+        "label": "Join the campaign",
+        "href": "#volunteer"
+      },
+      "secondaryCta": {
+        "label": "Read the platform",
+        "href": "#platform"
+      },
+      "portraitSrc": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&h=1000&fit=crop&crop=faces",
+      "portraitAlt": "Jordan Ellis, community organizer",
+      "backgroundSrc": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=900&fit=crop",
+      "imagePosition": "right",
+      "mobileImagePosition": "bottom"
+    },
+    {
+      "id": "blk_story",
+      "type": "richText",
+      "layout": {
+        "width": "contained",
+        "background": "none",
+        "spacing": "normal",
+        "align": "left"
+      },
+      "markdown": "Jordan grew up on Maple Street, graduated from Central High, and still coaches youth soccer on Saturday mornings.\n\nAfter a decade as a community organizer, Jordan helped pass the city's first renter protection ordinance and secured funding for two new school nurses. This campaign is about bringing that same persistence to Ward 3."
+    },
+    {
+      "id": "blk_stats",
+      "type": "statGrid",
+      "layout": {
+        "width": "contained",
+        "background": "card",
+        "spacing": "normal",
+        "align": "center"
+      },
+      "heading": "Record of results",
+      "columns": 3,
+      "stats": [
+        {
+          "id": "stat_1",
+          "value": "15+",
+          "label": "Years organizing locally"
+        },
+        {
+          "id": "stat_2",
+          "value": "2,400",
+          "label": "Families helped stay housed"
+        },
+        {
+          "id": "stat_3",
+          "value": "100%",
+          "label": "Small-donor funded"
+        }
+      ]
+    },
+    {
+      "id": "blk_quote",
+      "type": "quote",
+      "layout": {
+        "width": "contained",
+        "background": "accent",
+        "spacing": "normal",
+        "align": "center"
+      },
+      "text": "Jordan listens first, then acts. That's the kind of representative Ward 3 deserves.",
+      "attribution": "Maria Chen, small business owner"
+    },
+    {
+      "id": "blk_cta",
+      "type": "ctaStrip",
+      "layout": {
+        "width": "contained",
+        "background": "none",
+        "spacing": "normal",
+        "align": "center"
+      },
+      "headline": "Ready to build something better?",
+      "body": "Chip in an hour a week or host a yard sign — every bit moves us forward.",
+      "primaryCta": {
+        "label": "Volunteer",
+        "href": "#volunteer"
+      }
+    }
+  ]
+}

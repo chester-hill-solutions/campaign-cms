@@ -96,7 +96,7 @@ import { savePageDocDraft } from '../lib/cms/content.server'
 import { requireAdmin } from './adminAuth'
 
 export const adminSavePageDocFn = createServerFn({ method: 'POST' })
-  .validator((data: { entryId: string; payload: unknown; csrfToken: string }) => data)
+  .inputValidator((data: { entryId: string; payload: unknown; csrfToken: string }) => data)
   .handler(async ({ data }) => {
     await requireAdmin(data.csrfToken)
     return savePageDocDraft(data.entryId, data.payload)

@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router'
 import {
   ArrowLeft,
   Check,
@@ -73,6 +72,7 @@ type Props = {
   title: string
   meta: EntryEditorMeta
   publicPath: string | null
+  pagesListHref?: string | null
   saveStatus: AutosaveStatus
   saveError: string | null
   dirty: boolean
@@ -94,6 +94,7 @@ export function EditorTopBar({
   title,
   meta,
   publicPath,
+  pagesListHref = '/admin/pages',
   saveStatus,
   saveError,
   dirty,
@@ -119,14 +120,18 @@ export function EditorTopBar({
   return (
     <div className="pb-topbar sticky top-0 z-40 -mx-4 mb-2 border-b border-border-subtle bg-surface-page/95 px-4 py-2 backdrop-blur sm:-mx-6 sm:px-6">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-        <Link
-          to="/admin/pages"
-          className="focus-ring inline-flex items-center gap-1 text-sm font-semibold text-ink-muted hover:text-ink"
-        >
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Pages
-        </Link>
-        <span className="h-5 w-px bg-border-subtle" aria-hidden="true" />
+        {pagesListHref ? (
+          <>
+            <a
+              href={pagesListHref}
+              className="focus-ring inline-flex items-center gap-1 text-sm font-semibold text-ink-muted hover:text-ink"
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              Pages
+            </a>
+            <span className="h-5 w-px bg-border-subtle" aria-hidden="true" />
+          </>
+        ) : null}
         <button
           type="button"
           className="focus-ring max-w-56 truncate text-left text-sm font-bold text-ink hover:text-accent-orange"
