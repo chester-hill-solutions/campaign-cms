@@ -1,0 +1,27 @@
+/*
+ * Default design tokens required by @campaign/cms-react components.
+ *
+ * Host apps that already define these variables in their own theme should NOT
+ * import this file. New hosts can import it as a neutral starting point and
+ * override individual tokens.
+ *
+ * Tailwind note: host apps must also register the package sources so utility
+ * classes used by CMS components are generated, e.g. in your main CSS:
+ *
+ *   @source "../../packages/cms-react/src";
+ */
+:root {
+  --ink: #1f2421;
+  --ink-muted: color-mix(in oklab, #1f2421 66%, #6b6b6b);
+  --surface-page: #fafaf7;
+  --surface-card: #ffffff;
+  --surface-elevated: #f1f1ec;
+  --line-strong: color-mix(in oklab, #1f2421 18%, transparent);
+  --border-subtle: color-mix(in oklab, var(--line-strong) 45%, transparent);
+  --accent-orange: #d9651f;
+  --accent-red: #b3402e;
+  --accent-green: #1f3d2b;
+  --primary-dark: #1f2421;
+  --primary-light: #fafaf7;
+  --secondary-dark: #2c2c26;
+}

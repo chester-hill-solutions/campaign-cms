@@ -1,0 +1,20 @@
+{
+  "name": "@campaign/cms-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "D1/R2-backed CMS persistence: content entries, draft/publish revisions, pageDoc storage, and the media library. Cloudflare bindings are injected by the host.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@campaign/cms-core": "*"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250110.0",
+    "typescript": "^5.7.2"
+  }
+}
