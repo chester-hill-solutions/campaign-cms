@@ -1,6 +1,6 @@
 # GitHub Pages demo
 
-Static SPA that renders the seeded campaign About page with `@campaign/cms-react` — no D1, no editor, no server.
+Browser-based page builder demo — the real `EditorCanvas`, settings panel, and autosave UI from `@campaign/cms-react`. Drafts persist in `localStorage` (no D1, no server).
 
 ## Local dev
 
@@ -21,6 +21,8 @@ VITE_BASE=/campaign-cms/ npm run build -w campaign-cms-gh-pages
 npm run preview -w campaign-cms-gh-pages
 # → http://localhost:3002/campaign-cms/
 ```
+
+**Publish** in the demo copies the draft to a second `localStorage` key. Open the external-link icon (or `?view=preview`) to see that published snapshot.
 
 Pushes to `main` deploy automatically via [`.github/workflows/gh-pages.yml`](../../.github/workflows/gh-pages.yml).
 

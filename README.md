@@ -68,7 +68,7 @@ import { BlockRenderer, CmsUiProvider } from '@campaign/cms-react'
 | Example | What it shows |
 |---------|----------------|
 | **[minimal-site](./examples/minimal-site/)** | Full page builder (D1, autosave, publish). No auth. |
-| **[gh-pages](./examples/gh-pages/)** | Static block preview — deploys to GitHub Pages on push to `main`. |
+| **[gh-pages](./examples/gh-pages/)** | Browser page builder demo — deploys to GitHub Pages on push to `main`. |
 
 **Local editor** (minimal-site):
 
@@ -78,16 +78,16 @@ npm run example:setup && npm run example:seed && npm run example:dev
 # → http://localhost:3001/about      (published preview, after Publish)
 ```
 
-**Live demo** (after enabling Pages → GitHub Actions in repo settings):
+**Live editor demo:**
 
 https://chester-hill-solutions.github.io/campaign-cms/
-
-**Local static preview:**
 
 ```bash
 npm run example:pages:dev
 # → http://localhost:3002
 ```
+
+Publish in the demo saves to your browser; use the top-bar external-link icon for `?view=preview`.
 
 Production reference: [frank-domenic](https://github.com/chester-hill-solutions/frank-domenic) (private campaign site using these packages).
 
