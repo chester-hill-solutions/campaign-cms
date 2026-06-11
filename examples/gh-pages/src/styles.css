@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@source "../../../packages/cms-react/src";
+@import "@campaign/cms-react/styles/cms-tokens.css";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+
+.hero-block__grid {
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.hero-block__portrait {
+  position: relative;
+}
+
+.hero-block__figure--mobile-first {
+  order: -1;
+}
+
+@container (min-width: 28rem) {
+  .hero-block__grid--image-right {
+    grid-template-columns: 1fr min(42%, 22rem);
+  }
+
+  .hero-block__grid--image-left {
+    grid-template-columns: min(42%, 22rem) 1fr;
+  }
+
+  .hero-block__grid--image-left .hero-block__figure {
+    order: -1;
+  }
+
+  .hero-block__figure--mobile-first {
+    order: unset;
+  }
+}

@@ -63,14 +63,30 @@ import { BlockRenderer, CmsUiProvider } from '@campaign/cms-react'
 | [Block types reference](./docs/reference/block-types.md) | All 23 block schemas |
 | [Store API reference](./docs/reference/store-api.md) | Every `createCmsStore` method |
 
-## Example
+## Examples
 
-**[examples/minimal-site](./examples/minimal-site/)** — opens the page builder at `/` with a seeded campaign About page (D1 + autosave + publish). No auth.
+| Example | What it shows |
+|---------|----------------|
+| **[minimal-site](./examples/minimal-site/)** | Full page builder (D1, autosave, publish). No auth. |
+| **[gh-pages](./examples/gh-pages/)** | Static block preview — deploys to GitHub Pages on push to `main`. |
+
+**Local editor** (minimal-site):
 
 ```bash
 npm run example:setup && npm run example:seed && npm run example:dev
 # → http://localhost:3001/          (editor)
 # → http://localhost:3001/about      (published preview, after Publish)
+```
+
+**Live demo** (after enabling Pages → GitHub Actions in repo settings):
+
+https://chester-hill-solutions.github.io/campaign-cms/
+
+**Local static preview:**
+
+```bash
+npm run example:pages:dev
+# → http://localhost:3002
 ```
 
 Production reference: [frank-domenic](https://github.com/chester-hill-solutions/frank-domenic) (private campaign site using these packages).
