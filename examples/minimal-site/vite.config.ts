@@ -1,0 +1,22 @@
+import { defineConfig } from 'vite'
+import { cloudflare } from '@cloudflare/vite-plugin'
+import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import viteReact from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+import tsconfigPaths from 'vite-tsconfig-paths'
+
+export default defineConfig({
+  resolve: {
+    dedupe: ['react', 'react-dom'],
+  },
+  ssr: {
+    noExternal: ['react', 'react-dom', 'scheduler', /^@tanstack\//, /^@campaign\//],
+  },
+  plugins: [
+    cloudflare({ viteEnvironment: { name: 'ssr' } }),
+    tsconfigPaths({ projects: ['./tsconfig.json'] }),
+    tailwindcss(),
+    tanstackStart(),
+    viteReact(),
+  ],
+})

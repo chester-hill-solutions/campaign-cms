@@ -2,8 +2,20 @@
   "name": "campaign-cms",
   "private": true,
   "type": "module",
+  "description": "Block-based CMS and page builder for campaign sites on Cloudflare D1/R2 and TanStack Start.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chester-hill-solutions/campaign-cms.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chester-hill-solutions/campaign-cms/issues"
+  },
+  "homepage": "https://github.com/chester-hill-solutions/campaign-cms#readme",
+  "author": "Chester Hill Solutions",
+  "license": "MIT",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
   "scripts": {
     "test": "npm run test --workspaces --if-present",

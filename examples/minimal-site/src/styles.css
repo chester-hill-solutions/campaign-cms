@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@source "../../../packages/cms-react/src";
+@import "@campaign/cms-react/styles/cms-tokens.css";
+
+@theme {
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-accent-orange: var(--accent-orange);
+  --color-surface-page: var(--surface-page);
+  --color-line-strong: var(--line-strong);
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}

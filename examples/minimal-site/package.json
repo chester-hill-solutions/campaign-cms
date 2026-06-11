@@ -1,0 +1,37 @@
+{
+  "name": "campaign-cms-minimal-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --port 3001",
+    "build": "vite build",
+    "setup:local": "wrangler d1 migrations apply campaign-cms-example --local",
+    "seed:local": "node scripts/seed-local.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@campaign/cms-core": "*",
+    "@campaign/cms-react": "*",
+    "@campaign/cms-server": "*",
+    "@tailwindcss/vite": "^4.1.18",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tanstack/react-router": "1.168.23",
+    "@tanstack/react-start": "1.167.43",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwindcss": "^4.1.18",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.31.2",
+    "@rsbuild/core": "^2.0.0",
+    "@tanstack/router-plugin": "1.167.23",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.4",
+    "typescript": "^5.7.2",
+    "vite": "^7.3.1",
+    "vite-tsconfig-paths": "^5.1.4",
+    "wrangler": "^4.81.1"
+  }
+}
