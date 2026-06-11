@@ -10,11 +10,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@campaign/cms-agent": "*",
     "@campaign/cms-core": "*",
     "@campaign/cms-react": "*",
     "@campaign/cms-server": "*",
-    "@tailwindcss/vite": "^4.1.18",
     "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "^4.1.18",
+    "@tanstack/ai": "^0.28.0",
+    "@tanstack/ai-openrouter": "^0.13.1",
+    "@tanstack/ai-react": "^0.15.4",
     "@tanstack/react-router": "1.168.23",
     "@tanstack/react-start": "1.167.43",
     "react": "^19.2.0",

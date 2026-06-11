@@ -17,6 +17,9 @@ const store = createCmsStore(() => ({ db: env.DB, media: env.MEDIA }), {
   entryIdFromPageSlug,
 })
 
+/** Full store instance — used by the agent tool layer (see agent.server.ts). */
+export const cmsStore = store
+
 export const {
   getPublishedPageDocBySlug,
   getPageDocEditorState,

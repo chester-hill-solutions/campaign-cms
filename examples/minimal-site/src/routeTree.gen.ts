@@ -9,9 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AgentRouteImport } from './routes/agent'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiCmsMcpRouteImport } from './routes/api/cms/mcp'
+import { Route as ApiCmsChatRouteImport } from './routes/api/cms/chat'
 
+const AgentRoute = AgentRouteImport.update({
+  id: '/agent',
+  path: '/agent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -22,35 +30,64 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCmsMcpRoute = ApiCmsMcpRouteImport.update({
+  id: '/api/cms/mcp',
+  path: '/api/cms/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCmsChatRoute = ApiCmsChatRouteImport.update({
+  id: '/api/cms/chat',
+  path: '/api/cms/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/agent': typeof AgentRoute
+  '/api/cms/chat': typeof ApiCmsChatRoute
+  '/api/cms/mcp': typeof ApiCmsMcpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/agent': typeof AgentRoute
+  '/api/cms/chat': typeof ApiCmsChatRoute
+  '/api/cms/mcp': typeof ApiCmsMcpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/agent': typeof AgentRoute
+  '/api/cms/chat': typeof ApiCmsChatRoute
+  '/api/cms/mcp': typeof ApiCmsMcpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '/' | '/about' | '/agent' | '/api/cms/chat' | '/api/cms/mcp'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/about' | '/agent' | '/api/cms/chat' | '/api/cms/mcp'
+  id: '__root__' | '/' | '/about' | '/agent' | '/api/cms/chat' | '/api/cms/mcp'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AgentRoute: typeof AgentRoute
+  ApiCmsChatRoute: typeof ApiCmsChatRoute
+  ApiCmsMcpRoute: typeof ApiCmsMcpRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/agent': {
+      id: '/agent'
+      path: '/agent'
+      fullPath: '/agent'
+      preLoaderRoute: typeof AgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -65,12 +102,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/cms/mcp': {
+      id: '/api/cms/mcp'
+      path: '/api/cms/mcp'
+      fullPath: '/api/cms/mcp'
+      preLoaderRoute: typeof ApiCmsMcpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/cms/chat': {
+      id: '/api/cms/chat'
+      path: '/api/cms/chat'
+      fullPath: '/api/cms/chat'
+      preLoaderRoute: typeof ApiCmsChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AgentRoute: AgentRoute,
+  ApiCmsChatRoute: ApiCmsChatRoute,
+  ApiCmsMcpRoute: ApiCmsMcpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

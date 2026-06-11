@@ -374,3 +374,14 @@ export const APP_BLOCK_TYPES = [
   'bioLinks',
   'donateEmbed',
 ] as const satisfies readonly PageBlock['type'][]
+
+/**
+ * Every block type in the pageBlock union, grouped order. Single source of
+ * truth for registries (factory, renderer, settings, agent tools) — kept in
+ * sync with the schema union by blockTypeSync.test.ts.
+ */
+export const ALL_BLOCK_TYPES = [
+  ...LAYOUT_BLOCK_TYPES,
+  ...CONTENT_BLOCK_TYPES,
+  ...APP_BLOCK_TYPES,
+] as const satisfies readonly PageBlock['type'][]

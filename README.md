@@ -15,6 +15,7 @@ Campaign sites share the same content problems: policy pages, hero sections, eve
 | [cms-core](./packages/cms-core) | `@campaign/cms-core` | Zod block schemas, page/block operations, validation, slugs |
 | [cms-server](./packages/cms-server) | `@campaign/cms-server` | `createCmsStore()` — D1 draft/publish + R2 media |
 | [cms-react](./packages/cms-react) | `@campaign/cms-react` | Public `BlockRenderer`, admin editor canvas, `MediaPicker` |
+| [cms-agent](./packages/cms-agent) | `@campaign/cms-agent` | Semantic LLM-agent tools over the store — structured errors, draft-safe writes |
 | [cms-setup](./packages/cms-setup) | `@campaign/cms-setup` | `campaign-cms init` CLI — migrations + setup checklist |
 
 ## Quick start
@@ -60,8 +61,13 @@ import { BlockRenderer, CmsUiProvider } from '@campaign/cms-react'
 | [App blocks](./docs/guides/app-blocks.md) | Campaign-specific block types |
 | [Styling](./docs/guides/styling.md) | Tailwind, CSS tokens, theme overrides |
 | [Media](./docs/guides/media.md) | R2 uploads, `/media/*` streaming |
-| [Block types reference](./docs/reference/block-types.md) | All 23 block schemas |
+| [Agent API](./docs/guides/agent-api.md) | Operating the CMS with an LLM agent — error codes, concurrency, MCP, production checklist |
+| [Block types reference](./docs/reference/block-types.md) | All block schemas (summary) |
+| [Agent block schemas](./docs/reference/agent-block-schemas.md) | Generated canonical field reference |
 | [Store API reference](./docs/reference/store-api.md) | Every `createCmsStore` method |
+| [Troubleshooting](./docs/troubleshooting.md) | Failure modes and fixes |
+
+Working in this repo with a coding agent? Start at [AGENTS.md](./AGENTS.md) and [CONTEXT.md](./CONTEXT.md).
 
 ## Examples
 

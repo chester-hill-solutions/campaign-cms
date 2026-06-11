@@ -27,6 +27,8 @@ export type CmsStoreConfig<TPayload extends { kind: string }> = {
   newPageDoc: (input: { title: string; slug: string }) => Omit<PageDocPayload, 'kind' | 'version'>
   validateNewPageSlug: (slug: string) => string | null
   entryIdFromPageSlug: (slug: string) => string
+  /** Author recorded on revision rows (`created_by`). Defaults to 'admin'. */
+  revisionAuthor?: () => string
 }
 
 export type CmsStore<TPayload extends { kind: string }> = ReturnType<
@@ -218,6 +220,7 @@ export function createCmsStore<TPayload extends { kind: string }>(
     const version = await nextRevisionVersion(entryId)
     const payloadStr = JSON.stringify(payload)
     const now = new Date().toISOString()
+    const author = config.revisionAuthor?.() ?? 'admin'
 
     await db().batch([
       db()
@@ -225,7 +228,7 @@ export function createCmsStore<TPayload extends { kind: string }>(
           `INSERT INTO content_revisions (id, entry_id, payload, version, created_at, created_by, message)
            VALUES (?, ?, ?, ?, ?, ?, ?)`,
         )
-        .bind(id, entryId, payloadStr, version, now, 'admin', message),
+        .bind(id, entryId, payloadStr, version, now, author, message),
       db()
         .prepare(
           `UPDATE content_entries SET draft_revision_id = ?, updated_at = datetime('now') WHERE id = ?`,
@@ -273,9 +276,9 @@ export function createCmsStore<TPayload extends { kind: string }>(
       db()
         .prepare(
           `INSERT INTO content_revisions (id, entry_id, payload, version, created_at, created_by, message)
-           VALUES (?, ?, ?, COALESCE((SELECT MAX(version) + 1 FROM content_revisions WHERE entry_id = ?), 1), ?, 'admin', ?)`,
+           VALUES (?, ?, ?, COALESCE((SELECT MAX(version) + 1 FROM content_revisions WHERE entry_id = ?), 1), ?, ?, ?)`,
         )
-        .bind(id, entryId, payloadStr, entryId, now, message),
+        .bind(id, entryId, payloadStr, entryId, now, config.revisionAuthor?.() ?? 'admin', message),
       db()
         .prepare(
           `UPDATE content_entries SET
@@ -293,6 +296,7 @@ export function createCmsStore<TPayload extends { kind: string }>(
   async function savePageDocDraft(
     entryId: string,
     content: Omit<PageDocPayload, 'kind' | 'version'>,
+    message = 'draft',
   ): Promise<{ ok: true } | { ok: false; fieldErrors: Record<string, string[]> }> {
     const payload: PageDocPayload = { kind: 'pageDoc', version: 1, ...content }
     const parsed = pageDocPayloadSchema.safeParse(payload)
@@ -305,7 +309,7 @@ export function createCmsStore<TPayload extends { kind: string }>(
       .bind(entryId)
       .run()
     await syncContentEntryMetadata(entryId, content.title, content.slug || null)
-    await insertDraftRevisionRaw(entryId, parsed.data, 'draft')
+    await insertDraftRevisionRaw(entryId, parsed.data, message)
     return { ok: true }
   }
 

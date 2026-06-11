@@ -4,6 +4,12 @@
   "compatibility_date": "2026-04-09",
   "compatibility_flags": ["nodejs_compat"],
   "main": "./src/server.ts",
+  // Agent kill switch — off by default. Enable locally via .dev.vars:
+  //   CMS_AGENT_ENABLED=1
+  //   OPENROUTER_API_KEY=sk-or-...
+  "vars": {
+    "CMS_AGENT_ENABLED": "0"
+  },
   "d1_databases": [
     {
       "binding": "DB",
