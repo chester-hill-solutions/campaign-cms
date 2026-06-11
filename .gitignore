@@ -1,0 +1,11 @@
+node_modules/
+**/package-lock.json
+!package-lock.json
+bun.lock
+bun.lockb
+pnpm-lock.yaml
+yarn.lock
+*.tsbuildinfo
+.vite/
+dist/
+.DS_Store
