@@ -11,6 +11,7 @@ Campaign CMS documentation for [Chester Hill Solutions](https://github.com/chest
 ## Guides
 
 - [Host integration](./guides/host-integration.md)
+- [Cloudflare CI](./guides/cloudflare-ci.md)
 - [Public pages](./guides/public-pages.md)
 - [Admin editor](./guides/admin-editor.md)
 - [App blocks](./guides/app-blocks.md)

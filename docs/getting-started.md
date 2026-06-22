@@ -10,7 +10,15 @@ This guide walks through adding Campaign CMS to a new TanStack Start site on Clo
 
 ## 1. Add packages
 
-Install the four packages in your host app (or clone this repo and use `file:` paths):
+Install the four packages in your host app. Choose one layout:
+
+### Option A — sibling checkout (local dev)
+
+Clone this repo next to your campaign site:
+
+```bash
+git clone https://github.com/chester-hill-solutions/campaign-cms.git
+```
 
 ```json
 {
@@ -25,11 +33,27 @@ Install the four packages in your host app (or clone this repo and use `file:` p
 }
 ```
 
-Clone the repo next to your campaign site, or install from GitHub and copy the `packages/` paths you need:
+### Option B — vendor submodule (recommended for CI)
+
+For [Cloudflare Workers Builds](./guides/cloudflare-ci.md), pin the repo inside
+your site so CI can resolve the packages:
 
 ```bash
-git clone https://github.com/chester-hill-solutions/campaign-cms.git
+git submodule add https://github.com/chester-hill-solutions/campaign-cms.git vendor/campaign-cms
 ```
+
+```json
+{
+  "dependencies": {
+    "@campaign/cms-core": "file:../vendor/campaign-cms/packages/cms-core",
+    "@campaign/cms-react": "file:../vendor/campaign-cms/packages/cms-react",
+    "@campaign/cms-server": "file:../vendor/campaign-cms/packages/cms-server"
+  }
+}
+```
+
+See [Cloudflare CI](./guides/cloudflare-ci.md) for the build-time submodule
+init script and Linux lockfile notes.
 
 ## 2. Initialize migrations and bindings
 
@@ -118,7 +142,17 @@ In your main CSS file:
 @import "@campaign/cms-react/styles/cms-tokens.css";
 ```
 
-Or point `@source` at a sibling `campaign-cms` checkout. Override CSS variables in your theme to match campaign branding.
+Or point `@source` at a sibling or vendored checkout:
+
+```css
+/* Sibling repo */
+@source "../../../campaign-cms/packages/cms-react/src";
+
+/* Vendor submodule (recommended for CI) */
+@source "../vendor/campaign-cms/packages/cms-react/src";
+```
+
+Override CSS variables in your theme to match campaign branding.
 
 ## 7. Add the admin editor (optional)
 

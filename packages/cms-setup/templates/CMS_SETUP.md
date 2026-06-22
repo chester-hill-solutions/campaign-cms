@@ -76,6 +76,14 @@ Add the package sources to Tailwind content scanning in your main CSS file (adju
 /* Sibling repo next to the campaign site */
 @source "../../../campaign-cms/packages/cms-react/src";
 
+/* Vendor submodule (recommended for Cloudflare CI) */
+@source "../vendor/campaign-cms/packages/cms-react/src";
+
 /* Or, if installed only via node_modules file: link */
 @source "../../node_modules/@campaign/cms-react/src";
 ```
+
+For Cloudflare Workers Builds, prefer the vendor submodule layout and follow
+[docs/guides/cloudflare-ci.md](../../docs/guides/cloudflare-ci.md). Copy
+`packages/cms-setup/templates/scripts/ensure-vendor-cms.mjs` into your site if
+you need a build-time submodule init step.

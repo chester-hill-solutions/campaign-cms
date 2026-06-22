@@ -20,6 +20,8 @@
 
 | Symptom | Fix |
 |---------|-----|
+| CI build can't resolve `@campaign/cms-react/styles/cms-tokens.css` | Use a [vendor submodule](./guides/cloudflare-ci.md) instead of sibling `file:` paths; init the submodule before `vite build` |
+| `Cannot find native binding` / `…linux-x64-gnu` on Workers Builds | Pin Linux optional deps in the host lockfile — see [Cloudflare CI](./guides/cloudflare-ci.md) |
 | `blockTypeSync.test.ts` fails after adding a block type | Register the type everywhere — factory, renderer, settings, labels, group constants (see [agent-task-map.md](./agent-task-map.md)) |
 | `agentSchemaSync.test.ts` fails | Regenerate the doc: `UPDATE_AGENT_DOCS=1 npm test -w @campaign/cms-agent` |
 | Editor shows stale content after agent edits | The agent writes new draft revisions; reload the editor. Use `list_revisions` / `restore_revision` if changes need to be rolled back |

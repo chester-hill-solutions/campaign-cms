@@ -133,4 +133,4 @@ resolve: {
 ## Reference implementations
 
 - **Minimal:** [examples/minimal-site](../../examples/minimal-site/)
-- **Production:** [frank-domenic](https://github.com/chester-hill-solutions/frank-domenic) `website/src/lib/cms/`
+- **Production:** [frank-domenic](https://github.com/wra-sol/frank-domenic) — vendor submodule + Cloudflare CI; see [Cloudflare CI](./cloudflare-ci.md)
