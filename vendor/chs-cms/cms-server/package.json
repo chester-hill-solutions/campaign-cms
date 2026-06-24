@@ -28,7 +28,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@chester-hill-solutions/cms-core": "workspace:*"
+    "@chester-hill-solutions/cms-core": "file:../cms-core"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250110.0",

@@ -26,10 +26,7 @@ jobs:
           cache: npm
 
       - name: Install with vendored CMS packages
-        run: |
-          npm pkg set "overrides.@chester-hill-solutions/cms-core=file:vendor/chs-cms/cms-core"
-          npm pkg set "overrides.@chester-hill-solutions/cms-react=file:vendor/chs-cms/cms-react"
-          npm install
+        run: npm install
 
       - name: Build static demo
         run: VITE_BASE=/campaign-cms/ npm run build -w campaign-cms-gh-pages

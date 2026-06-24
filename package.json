@@ -26,7 +26,12 @@
   },
   "overrides": {
     "react": "$react",
-    "react-dom": "$react-dom"
+    "react-dom": "$react-dom",
+    "@chester-hill-solutions/cms-core": "file:vendor/chs-cms/cms-core",
+    "@chester-hill-solutions/cms-server": "file:vendor/chs-cms/cms-server",
+    "@chester-hill-solutions/cms-react": "file:vendor/chs-cms/cms-react",
+    "@chester-hill-solutions/cms-agent": "file:vendor/chs-cms/cms-agent",
+    "@chester-hill-solutions/cms-setup": "file:vendor/chs-cms/cms-setup"
   },
   "devDependencies": {
     "react": "^19.2.0",

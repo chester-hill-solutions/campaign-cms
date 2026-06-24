@@ -34,8 +34,8 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@chester-hill-solutions/cms-core": "workspace:*",
-    "@chester-hill-solutions/cms-server": "workspace:*",
+    "@chester-hill-solutions/cms-core": "file:../cms-core",
+    "@chester-hill-solutions/cms-server": "file:../cms-server",
     "zod": "^4.3.6"
   },
   "devDependencies": {

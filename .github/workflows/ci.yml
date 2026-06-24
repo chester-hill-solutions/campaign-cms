@@ -20,13 +20,7 @@ jobs:
           cache: npm
 
       - name: Install with vendored CMS packages
-        run: |
-          npm pkg set "overrides.@chester-hill-solutions/cms-core=file:vendor/chs-cms/cms-core"
-          npm pkg set "overrides.@chester-hill-solutions/cms-server=file:vendor/chs-cms/cms-server"
-          npm pkg set "overrides.@chester-hill-solutions/cms-react=file:vendor/chs-cms/cms-react"
-          npm pkg set "overrides.@chester-hill-solutions/cms-agent=file:vendor/chs-cms/cms-agent"
-          npm pkg set "overrides.@chester-hill-solutions/cms-setup=file:vendor/chs-cms/cms-setup"
-          npm install
+        run: npm install
 
       - name: Typecheck
         run: npm run typecheck
