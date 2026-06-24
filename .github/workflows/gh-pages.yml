@@ -26,7 +26,7 @@ jobs:
           cache: npm
 
       - name: Install with vendored CMS packages
-        run: npm install
+        run: npm ci --legacy-peer-deps
 
       - name: Build static demo
         run: VITE_BASE=/campaign-cms/ npm run build -w campaign-cms-gh-pages

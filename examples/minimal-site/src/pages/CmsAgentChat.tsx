@@ -102,7 +102,7 @@ export function CmsAgentChat() {
                 return (
                   <ToolCallView
                     key={part.id}
-                    part={part}
+                    part={part as ToolCallPart}
                     onApproval={(id, approved) =>
                       void addToolApprovalResponse({ id, approved })
                     }
