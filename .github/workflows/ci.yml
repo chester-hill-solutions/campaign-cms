@@ -22,7 +22,7 @@ jobs:
           registry-url: https://npm.pkg.github.com
           scope: "@chester-hill-solutions"
 
-      - run: npm ci
+      - run: npm install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

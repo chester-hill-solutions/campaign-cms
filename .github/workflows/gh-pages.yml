@@ -9,6 +9,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  packages: read
 
 concurrency:
   group: pages
@@ -24,8 +25,12 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          registry-url: https://npm.pkg.github.com
+          scope: "@chester-hill-solutions"
 
-      - run: npm ci
+      - run: npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build static demo
         run: VITE_BASE=/campaign-cms/ npm run build -w campaign-cms-gh-pages
