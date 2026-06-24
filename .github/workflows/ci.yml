@@ -7,24 +7,36 @@ on:
 
 permissions:
   contents: read
-  packages: read
+  actions: read
 
 jobs:
+  build-cms:
+    uses: chester-hill-solutions/chester-hill-solutions/.github/workflows/build-cms-artifact.yml@main
+
   ci:
+    needs: build-cms
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: chs-cms-packages
+          path: vendor/chs-cms
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-          registry-url: https://npm.pkg.github.com
-          scope: "@chester-hill-solutions"
 
-      - run: npm install
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install with built CMS packages
+        run: |
+          npm pkg set "overrides.@chester-hill-solutions/cms-core=file:vendor/chs-cms/cms-core"
+          npm pkg set "overrides.@chester-hill-solutions/cms-server=file:vendor/chs-cms/cms-server"
+          npm pkg set "overrides.@chester-hill-solutions/cms-react=file:vendor/chs-cms/cms-react"
+          npm pkg set "overrides.@chester-hill-solutions/cms-agent=file:vendor/chs-cms/cms-agent"
+          npm pkg set "overrides.@chester-hill-solutions/cms-setup=file:vendor/chs-cms/cms-setup"
+          npm install
 
       - name: Typecheck
         run: npm run typecheck

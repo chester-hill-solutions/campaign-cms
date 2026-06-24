@@ -9,28 +9,37 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  packages: read
+  actions: read
 
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
+  build-cms:
+    uses: chester-hill-solutions/chester-hill-solutions/.github/workflows/build-cms-artifact.yml@main
+
   build:
+    needs: build-cms
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: chs-cms-packages
+          path: vendor/chs-cms
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-          registry-url: https://npm.pkg.github.com
-          scope: "@chester-hill-solutions"
 
-      - run: npm install
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install with built CMS packages
+        run: |
+          npm pkg set "overrides.@chester-hill-solutions/cms-core=file:vendor/chs-cms/cms-core"
+          npm pkg set "overrides.@chester-hill-solutions/cms-react=file:vendor/chs-cms/cms-react"
+          npm install
 
       - name: Build static demo
         run: VITE_BASE=/campaign-cms/ npm run build -w campaign-cms-gh-pages
