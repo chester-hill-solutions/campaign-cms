@@ -12,6 +12,7 @@ permissions:
 jobs:
   build-cms:
     uses: chester-hill-solutions/chester-hill-solutions/.github/workflows/build-cms-artifact.yml@main
+    secrets: inherit
 
   ci:
     needs: build-cms
