@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: read
-  packages: read
 
 jobs:
   ci:
@@ -15,16 +14,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/checkout@v4
+        with:
+          repository: chester-hill-solutions/chester-hill-solutions
+          path: vendor/chester-hill-solutions
+          ref: main
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Build CMS packages from monorepo
+        working-directory: vendor/chester-hill-solutions
+        run: bun install && bun run build:cms
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-          registry-url: https://npm.pkg.github.com
-          scope: "@chester-hill-solutions"
 
-      - run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install with vendored CMS packages
+        run: |
+          npm pkg set "overrides.@chester-hill-solutions/cms-core=file:vendor/chester-hill-solutions/packages/cms-core"
+          npm pkg set "overrides.@chester-hill-solutions/cms-server=file:vendor/chester-hill-solutions/packages/cms-server"
+          npm pkg set "overrides.@chester-hill-solutions/cms-react=file:vendor/chester-hill-solutions/packages/cms-react"
+          npm pkg set "overrides.@chester-hill-solutions/cms-agent=file:vendor/chester-hill-solutions/packages/cms-agent"
+          npm pkg set "overrides.@chester-hill-solutions/cms-setup=file:vendor/chester-hill-solutions/packages/cms-setup"
+          npm install
 
       - name: Typecheck
         run: npm run typecheck
