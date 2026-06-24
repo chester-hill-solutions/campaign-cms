@@ -10,10 +10,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@campaign/cms-agent": "*",
-    "@campaign/cms-core": "*",
-    "@campaign/cms-react": "*",
-    "@campaign/cms-server": "*",
+    "@chester-hill-solutions/cms-agent": "^0.1.0",
+    "@chester-hill-solutions/cms-core": "^0.1.0",
+    "@chester-hill-solutions/cms-react": "^0.1.0",
+    "@chester-hill-solutions/cms-server": "^0.1.0",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/ai": "^0.28.0",
@@ -27,6 +27,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@chester-hill-solutions/cms-setup": "^0.1.0",
     "@cloudflare/vite-plugin": "^1.31.2",
     "@cloudflare/workers-types": "^4.20250110.0",
     "@rsbuild/core": "^2.0.0",

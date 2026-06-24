@@ -2,7 +2,7 @@ import {
   defaultNewPageDoc as coreDefaultNewPageDoc,
   entryIdFromPageSlug,
   type PageDocPayload,
-} from '@campaign/cms-core'
+} from '@chester-hill-solutions/cms-core'
 
 export { entryIdFromPageSlug }
 

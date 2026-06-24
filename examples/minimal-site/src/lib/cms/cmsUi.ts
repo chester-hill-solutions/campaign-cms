@@ -1,4 +1,4 @@
-import type { CmsUiConfig } from '@campaign/cms-react'
+import type { CmsUiConfig } from '@chester-hill-solutions/cms-react'
 
 import { stockImages } from './stockImages'
 

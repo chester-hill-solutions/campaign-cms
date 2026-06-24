@@ -1,4 +1,4 @@
-import type { PageDocPayload, PageMeta } from '@campaign/cms-core'
+import type { PageDocPayload, PageMeta } from '@chester-hill-solutions/cms-core'
 
 const DRAFT_KEY = 'campaign-cms-demo-draft'
 const PUBLISHED_KEY = 'campaign-cms-demo-published'

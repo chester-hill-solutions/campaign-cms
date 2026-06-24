@@ -14,17 +14,15 @@
   "author": "Chester Hill Solutions",
   "license": "MIT",
   "workspaces": [
-    "packages/*",
     "examples/*"
   ],
   "scripts": {
-    "test": "npm run test --workspaces --if-present",
-    "typecheck": "npm run typecheck --workspaces --if-present",
     "example:setup": "npm run setup:local -w campaign-cms-minimal-site",
     "example:seed": "npm run seed:local -w campaign-cms-minimal-site",
     "example:dev": "npm run dev -w campaign-cms-minimal-site",
     "example:pages:dev": "npm run dev -w campaign-cms-gh-pages",
-    "example:pages:build": "VITE_BASE=/campaign-cms/ npm run build -w campaign-cms-gh-pages"
+    "example:pages:build": "VITE_BASE=/campaign-cms/ npm run build -w campaign-cms-gh-pages",
+    "typecheck": "npm run typecheck -w campaign-cms-minimal-site && npm run typecheck -w campaign-cms-gh-pages"
   },
   "overrides": {
     "react": "$react",

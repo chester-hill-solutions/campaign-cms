@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @source "../../../packages/cms-react/src";
-@import "@campaign/cms-react/styles/cms-tokens.css";
+@import "@chester-hill-solutions/cms-react/styles/cms-tokens.css";
 
 @theme {
   --font-sans: ui-sans-serif, system-ui, sans-serif;
