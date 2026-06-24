@@ -7,23 +7,24 @@ on:
 
 permissions:
   contents: read
-  actions: read
 
 jobs:
-  build-cms:
-    uses: chester-hill-solutions/chester-hill-solutions/.github/workflows/build-cms-artifact.yml@main
-    secrets: inherit
-
   ci:
-    needs: build-cms
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v4
+      - name: Checkout CMS monorepo
+        uses: actions/checkout@v4
         with:
-          name: chs-cms-packages
-          path: vendor/chs-cms
+          repository: chester-hill-solutions/chester-hill-solutions
+          path: vendor/chs-monorepo
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Build CMS packages
+        working-directory: vendor/chs-monorepo
+        run: bun install && bun run build:cms
 
       - uses: actions/setup-node@v4
         with:
@@ -32,11 +33,11 @@ jobs:
 
       - name: Install with built CMS packages
         run: |
-          npm pkg set "overrides.@chester-hill-solutions/cms-core=file:vendor/chs-cms/cms-core"
-          npm pkg set "overrides.@chester-hill-solutions/cms-server=file:vendor/chs-cms/cms-server"
-          npm pkg set "overrides.@chester-hill-solutions/cms-react=file:vendor/chs-cms/cms-react"
-          npm pkg set "overrides.@chester-hill-solutions/cms-agent=file:vendor/chs-cms/cms-agent"
-          npm pkg set "overrides.@chester-hill-solutions/cms-setup=file:vendor/chs-cms/cms-setup"
+          npm pkg set "overrides.@chester-hill-solutions/cms-core=file:vendor/chs-monorepo/packages/cms-core"
+          npm pkg set "overrides.@chester-hill-solutions/cms-server=file:vendor/chs-monorepo/packages/cms-server"
+          npm pkg set "overrides.@chester-hill-solutions/cms-react=file:vendor/chs-monorepo/packages/cms-react"
+          npm pkg set "overrides.@chester-hill-solutions/cms-agent=file:vendor/chs-monorepo/packages/cms-agent"
+          npm pkg set "overrides.@chester-hill-solutions/cms-setup=file:vendor/chs-monorepo/packages/cms-setup"
           npm install
 
       - name: Typecheck
