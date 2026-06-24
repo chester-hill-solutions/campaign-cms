@@ -2,7 +2,7 @@ import { env } from 'cloudflare:workers'
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import { formatToolError } from '@campaign/cms-agent/tanstack'
+import { formatToolError } from '@chester-hill-solutions/cms-agent/tanstack'
 
 import { cmsAgentTools } from '../../../lib/cms/agent.server'
 

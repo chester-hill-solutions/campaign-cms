@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 
-import type { PageDocPayload } from '@campaign/cms-core'
+import type { PageDocPayload } from '@chester-hill-solutions/cms-core'
 
 import {
   getPageDocEditorState,

@@ -1,6 +1,6 @@
 # GitHub Pages demo
 
-Browser-based page builder demo — the real `EditorCanvas`, settings panel, and autosave UI from `@campaign/cms-react`. Drafts persist in `localStorage` (no D1, no server).
+Browser-based page builder demo — the real `EditorCanvas`, settings panel, and autosave UI from `@chester-hill-solutions/cms-react`. Drafts persist in `localStorage` (no D1, no server).
 
 ## Local dev
 

@@ -7,7 +7,7 @@ import {
   type EntryEditorMeta,
   type PageDocPayload,
   type PageMeta,
-} from '@campaign/cms-core'
+} from '@chester-hill-solutions/cms-core'
 import {
   BlockSettingsPanel,
   CmsUiProvider,
@@ -17,7 +17,7 @@ import {
   useAutosave,
   useDocHistory,
   type Viewport,
-} from '@campaign/cms-react'
+} from '@chester-hill-solutions/cms-react'
 
 import seedPage from '../../minimal-site/scripts/seed-about.json'
 import { demoCmsUi } from './lib/cmsUi'

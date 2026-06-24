@@ -1,7 +1,7 @@
 import { env } from 'cloudflare:workers'
 
-import { pageDocPayloadSchema } from '@campaign/cms-core'
-import { createCmsStore } from '@campaign/cms-server'
+import { pageDocPayloadSchema } from '@chester-hill-solutions/cms-core'
+import { createCmsStore } from '@chester-hill-solutions/cms-server'
 
 import { defaultNewPageDoc, entryIdFromPageSlug, validateNewPageSlug } from './pageDocEntry'
 

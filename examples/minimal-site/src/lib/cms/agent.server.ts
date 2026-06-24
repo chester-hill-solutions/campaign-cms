@@ -4,10 +4,10 @@ import {
   createCmsAgentTools,
   type CmsAgentConfig,
   type ToolResult,
-} from '@campaign/cms-agent'
-import { createCmsToolSpecs } from '@campaign/cms-agent/tanstack'
-import { pageDocPayloadSchema } from '@campaign/cms-core'
-import { createCmsStore } from '@campaign/cms-server'
+} from '@chester-hill-solutions/cms-agent'
+import { createCmsToolSpecs } from '@chester-hill-solutions/cms-agent/tanstack'
+import { pageDocPayloadSchema } from '@chester-hill-solutions/cms-core'
+import { createCmsStore } from '@chester-hill-solutions/cms-server'
 
 import { defaultNewPageDoc, entryIdFromPageSlug, validateNewPageSlug } from './pageDocEntry'
 

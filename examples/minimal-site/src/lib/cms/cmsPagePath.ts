@@ -3,7 +3,7 @@ import {
   isReservedCmsSlug as coreIsReservedCmsSlug,
   normalizeCmsSlug,
   validateNewPageSlug as coreValidateNewPageSlug,
-} from '@campaign/cms-core'
+} from '@chester-hill-solutions/cms-core'
 
 export const CMS_RESERVED_PATH_PREFIXES = new Set(['admin', 'api', 'media'])
 

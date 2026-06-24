@@ -1,7 +1,7 @@
-import { BlockRenderer, CmsUiProvider } from '@campaign/cms-react'
+import { BlockRenderer, CmsUiProvider } from '@chester-hill-solutions/cms-react'
 
 import seedPage from '../../minimal-site/scripts/seed-about.json'
-import type { PageDocPayload } from '@campaign/cms-core'
+import type { PageDocPayload } from '@chester-hill-solutions/cms-core'
 
 import { demoCmsUi } from './lib/cmsUi'
 import { loadPublished, toPageMeta } from './lib/localDraft'
