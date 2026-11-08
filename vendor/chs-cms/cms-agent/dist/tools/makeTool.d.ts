@@ -1,6 +1,6 @@
 import type { z } from 'zod';
-import type { CmsAgentToolName } from '../schemas';
-import type { AgentCallContext, CmsAgentConfig, ToolResult } from '../types';
+import type { CmsAgentToolName } from '../schemas.js';
+import type { AgentCallOverrides, CmsAgentConfig, ToolResult } from '../types.js';
 export type CmsAgentTool = {
     name: CmsAgentToolName;
     description: string;
@@ -9,7 +9,7 @@ export type CmsAgentTool = {
     mutates: boolean;
     /** Transports should require human approval before executing (publish). */
     needsApproval: boolean;
-    execute: (rawInput: unknown, ctxOverride?: Partial<Omit<AgentCallContext, 'toolName'>>) => Promise<ToolResult>;
+    execute: (rawInput: unknown, ctxOverride?: AgentCallOverrides) => Promise<ToolResult>;
 };
 type MakeToolOptions<TSchema extends z.ZodType> = {
     name: CmsAgentToolName;

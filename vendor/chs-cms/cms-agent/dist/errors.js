@@ -1,4 +1,5 @@
 import { validatePageDoc } from '@chester-hill-solutions/cms-core';
+import { CmsPublishedSlugConflictError, CmsRevisionConflictError } from '@chester-hill-solutions/cms-store';
 export function toolError(code, error, extra) {
     return { ok: false, code, error, ...extra };
 }
@@ -51,9 +52,11 @@ export async function safeTool(ctx, onComplete, fn) {
         result =
             e instanceof AgentAccessDenied
                 ? forbidden(e.message)
-                : toolError('INTERNAL', 'Unexpected error executing tool', {
-                    retryable: true,
-                });
+                : e instanceof CmsRevisionConflictError || e instanceof CmsPublishedSlugConflictError
+                    ? toolError('CONFLICT', e.message, { suggestion: 'Call get_page to inspect the current draft before retrying.' })
+                    : toolError('INTERNAL', 'Unexpected error executing tool', {
+                        retryable: true,
+                    });
     }
     onComplete?.(ctx, result);
     return result;

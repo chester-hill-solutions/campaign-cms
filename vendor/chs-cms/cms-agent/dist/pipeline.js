@@ -1,4 +1,5 @@
-import { pageValidationError, toolError } from './errors';
+import { CmsRevisionConflictError } from '@chester-hill-solutions/cms-store';
+import { pageValidationError, toolError } from './errors.js';
 function toPageMeta(payload) {
     const { kind: _kind, version: _version, ...content } = payload;
     return content;
@@ -28,8 +29,7 @@ export async function loadDraftForEdit(store, entryId) {
 }
 /** Optimistic concurrency: fail when the draft moved under the caller. */
 export function checkExpectedRevision(currentDraftRevisionId, expectedDraftRevisionId) {
-    if (expectedDraftRevisionId !== undefined &&
-        expectedDraftRevisionId !== currentDraftRevisionId) {
+    if (expectedDraftRevisionId !== currentDraftRevisionId) {
         return toolError('CONFLICT', 'Draft changed since it was last read', {
             suggestion: 'Call get_page to load the latest draft, then retry.',
         });
@@ -37,17 +37,27 @@ export function checkExpectedRevision(currentDraftRevisionId, expectedDraftRevis
     return { ok: true, data: null };
 }
 /** Validate the full page, then persist it as the new draft revision. */
-export async function validateAndSaveDraft(store, entryId, content, message) {
+export async function validateAndSaveDraft(store, entryId, content, message, expectedRevisionId) {
     const validationError = pageValidationError(content);
     if (validationError)
         return validationError;
-    const saved = await store.savePageDocDraft(entryId, content, message);
+    let saved;
+    try {
+        saved = await store.savePageDocDraft(entryId, content, expectedRevisionId, message);
+    }
+    catch (error) {
+        if (error instanceof CmsRevisionConflictError)
+            return toolError('CONFLICT', error.message, {
+                suggestion: 'Call get_page to load the latest draft, then retry.',
+            });
+        throw error;
+    }
     if (!saved.ok) {
         return toolError('VALIDATION', 'Draft was rejected by the store', {
             fieldErrors: Object.entries(saved.fieldErrors).flatMap(([field, messages]) => messages.map((message) => ({ field, message }))),
         });
     }
-    return { ok: true, data: { entryId } };
+    return { ok: true, data: { entryId, draftRevisionId: saved.revisionId } };
 }
 /**
  * Standard write pipeline for block/meta mutations: fresh load, concurrency
@@ -64,8 +74,8 @@ export async function applyDraftMutation(store, entryId, expectedDraftRevisionId
     const mutated = mutate(loaded.data.content);
     if (!mutated.ok)
         return mutated;
-    const saved = await validateAndSaveDraft(store, entryId, mutated.data.content, message);
+    const saved = await validateAndSaveDraft(store, entryId, mutated.data.content, message, loaded.data.draftRevisionId);
     if (!saved.ok)
         return saved;
-    return { ok: true, data: { entryId, info: mutated.data.info } };
+    return { ok: true, data: { entryId, draftRevisionId: saved.data.draftRevisionId, info: mutated.data.info } };
 }

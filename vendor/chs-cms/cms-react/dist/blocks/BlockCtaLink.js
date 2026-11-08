@@ -15,5 +15,5 @@ export function BlockCtaLink({ cta, variant = 'primary' }) {
 export function BlockCtaRow({ ctas }) {
     if (ctas.length === 0)
         return null;
-    return (_jsx("div", { className: "flex max-w-lg flex-col gap-3 @sm:max-w-none @sm:flex-row @sm:flex-wrap", children: ctas.map((cta, index) => (_jsx(BlockCtaLink, { cta: cta, variant: index === 0 ? 'primary' : 'secondary' }, `${cta.label}-${index}`))) }));
+    return (_jsx("div", { className: "flex max-w-lg flex-col gap-3 @sm:max-w-none @sm:flex-row @sm:flex-wrap", children: ctas.map(({ cta, variant }, index) => (_jsx(BlockCtaLink, { cta: cta, variant: variant }, `${cta.label}-${index}`))) }));
 }

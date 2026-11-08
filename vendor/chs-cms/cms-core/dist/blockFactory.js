@@ -1,4 +1,4 @@
-import { createBlockId, DEFAULT_BLOCK_LAYOUT, } from './blockSchemas';
+import { createBlockId, DEFAULT_BLOCK_LAYOUT, DEFAULT_CONTAINER_LAYOUT, DEFAULT_STACK_CONTAINER_LAYOUT, } from './blockSchemas.js';
 const FALLBACK_IMAGE_PLACEHOLDER = '/favicon.ico';
 export function createDefaultBlock(type, defaults = {}) {
     const id = createBlockId();
@@ -23,6 +23,7 @@ export function createDefaultBlock(type, defaults = {}) {
                 layout,
                 columns: 2,
                 cards: [{ id: createBlockId('card'), title: 'Card title', body: 'Card body' }],
+                container: { ...DEFAULT_CONTAINER_LAYOUT },
             };
         case 'table':
             return {
@@ -72,9 +73,16 @@ export function createDefaultBlock(type, defaults = {}) {
                 layout,
                 columnCount: 2,
                 columns: [{ markdown: 'Column 1' }, { markdown: 'Column 2' }],
+                container: { ...DEFAULT_STACK_CONTAINER_LAYOUT },
             };
         case 'list':
-            return { id, type: 'list', layout, items: ['First item', 'Second item'] };
+            return {
+                id,
+                type: 'list',
+                layout,
+                items: ['First item', 'Second item'],
+                container: { ...DEFAULT_STACK_CONTAINER_LAYOUT },
+            };
         case 'divider':
             return { id, type: 'divider', layout };
         case 'sectionHeader':
@@ -108,6 +116,7 @@ export function createDefaultBlock(type, defaults = {}) {
                         note: 'Optional note.',
                     },
                 ],
+                container: { ...DEFAULT_CONTAINER_LAYOUT },
             };
         case 'timeline':
             return {
@@ -132,6 +141,18 @@ export function createDefaultBlock(type, defaults = {}) {
                 tone: 'info',
                 heading: 'Important note',
                 markdown: 'Use callouts for commitments, warnings, or source notes.',
+            };
+        case 'collectionGrid':
+            return {
+                id,
+                type: 'collectionGrid',
+                layout: { ...DEFAULT_BLOCK_LAYOUT },
+                collectionId: 'select-a-collection',
+                heading: 'Collection',
+                columns: 3,
+                showFeaturedOnly: false,
+                container: { ...DEFAULT_CONTAINER_LAYOUT },
+                cardStyle: 'summary',
             };
         case 'embed':
             return {

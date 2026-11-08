@@ -47,3 +47,73 @@
   --color-primary-light: var(--primary-light);
   --color-secondary-dark: var(--secondary-dark);
 }
+
+/* Shared editor fields need concrete form styles; Tailwind utilities alone do
+ * not style these host-contract classes. */
+.admin-field {
+  display: grid;
+  min-width: 0;
+  gap: 0.35rem;
+}
+
+.admin-field__label {
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.admin-field__hint {
+  color: var(--ink-muted);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+}
+
+.admin-field__input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 2.25rem;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  color: var(--ink);
+  background: var(--surface-card);
+  font: inherit;
+  font-size: 0.75rem;
+}
+
+.admin-field__input:focus-visible,
+.admin-checkbox input:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent-orange) 22%, transparent);
+  outline-offset: 1px;
+}
+
+.admin-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.admin-checkbox input {
+  flex: 0 0 auto;
+  margin: 0.15rem 0 0;
+  accent-color: var(--accent-orange);
+}
+
+.pb-settings-panel p:not([class]) {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+}
+
+/* Shared labeled fields used by CMS settings and authoring controls. */
+.admin-field { display: grid; gap: .375rem; min-width: 0; }
+.admin-field__label { font-size: .875rem; font-weight: 500; }
+.admin-field__input { display: block; width: 100%; min-width: 0; min-height: 2.75rem; padding: .625rem .75rem; border: 1px solid var(--border-subtle); border-radius: .5rem; background: var(--surface-card); color: var(--ink); }
+textarea.admin-field__input { resize: vertical; }
+.admin-field__hint { font-size: .8125rem; color: var(--ink-muted); }

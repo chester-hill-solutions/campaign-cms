@@ -1,38 +1,52 @@
 # AGENTS.md
 
-Guidance for coding agents (and new contributors) working in this repository.
+This repository is a thin integration harness for the canonical CMS libraries in
+[chester-hill-solutions](https://github.com/chester-hill-solutions/chester-hill-solutions).
+The examples use npm workspaces and checked-in built artifacts; runtime library
+source is not maintained here. [CONTEXT.md](./CONTEXT.md) records the content model.
 
-## What this repo is
-
-npm-workspaces monorepo for a block-based campaign CMS on Cloudflare Workers (D1 + R2) and TanStack Start. See [CONTEXT.md](./CONTEXT.md) for the domain model and [docs/architecture.md](./docs/architecture.md) for data flow.
-
-| Workspace | Role |
-|-----------|------|
-| `packages/cms-core` | Zod block schemas, pure page/block operations, validation |
-| `packages/cms-server` | `createCmsStore()` — D1 draft/publish + R2 media persistence |
-| `packages/cms-react` | Public `BlockRenderer` + admin editor canvas |
-| `packages/cms-agent` | Semantic agent tools over the store (`ToolResult`, never-throw) |
-| `packages/cms-setup` | `campaign-cms init` CLI |
-| `examples/minimal-site` | Reference host app: editor, public page, agent chat + MCP |
+| Path | Role |
+|---|---|
+| `examples/minimal-site` | TanStack Start + Workers D1/R2 editor/public page/agent example |
+| `examples/gh-pages` | Browser editor with localStorage draft/published snapshots |
+| `vendor/chs-cms` | Reviewed core/react/store/D1/agent/setup artifacts and provenance |
+| `tests` | Actual local workerd/D1/R2 host contract regressions; all outbound calls denied |
+| `scripts/check-cms-vendor.mjs` | Verify source artifact hashes and recorded dependency rewrites |
 
 ## Commands
 
+Use Node.js 22, matching CI. Keep npm and its existing lockfile.
+
 ```bash
-npm install               # bootstrap all workspaces
-npm run typecheck         # tsc across all workspaces (CI-enforced)
-npm test                  # vitest across all workspaces (CI-enforced)
-npm test -w @campaign/cms-agent          # one workspace
-npm run dev -w campaign-cms-minimal-site # dev server on :3001
+npm ci --legacy-peer-deps
+npm run typecheck
+npm test
+npm run build
+npm run example:setup  # local D1 migrations only
+npm run example:seed   # local demo data; run setup first
+npm run example:dev
 ```
 
-## Guardrails you must respect
+## Rules
 
-- **Block type registration is sync-tested.** Adding a block type to `pageBlockSchema` requires updating the group constants, `BLOCK_TYPE_LABELS`, `createDefaultBlock`, `renderBlockView`, and `BlockTypeSettings`. `blockTypeSync.test.ts` (cms-core and cms-react) fails until everything is registered. Follow [docs/guides/app-blocks.md](./docs/guides/app-blocks.md).
-- **`docs/reference/agent-block-schemas.md` is generated.** Never edit it by hand; regenerate with `UPDATE_AGENT_DOCS=1 npm test -w @campaign/cms-agent`. The sync test fails on drift.
-- **Agent tool handlers never throw.** Everything in `packages/cms-agent` returns `ToolResult`; writes go through `pipeline.ts` (`applyDraftMutation`), never call `savePageDocDraft` directly from a handler.
-- **Draft-only writes.** Only `publish_page` (and the store's `publishEntry`) may change what is live.
-- **No secrets in the repo.** Local config goes in `examples/minimal-site/.dev.vars` (gitignored): `CMS_AGENT_ENABLED`, `OPENROUTER_API_KEY`, `CMS_AGENT_MCP_SECRET`.
+- Work on a feature branch; merge through a PR. Preserve other branches/worktrees.
+- Do not hand-edit vendored library code. Fix canonical source, then refresh reviewed
+  artifacts with exact source/tarball hashes and sibling dependency rewrites recorded
+  in `vendor/chs-cms/provenance.json`. `npm run check:vendor` must pass.
+- The removed `cms-server` API is replaced by `cms-store` plus `cms-store-d1`.
+- Carry the opened draft revision through save/publish. On conflict preserve local
+  content, pause autosave, block publication and require explicit reload. Do not
+  refresh the guard from unrelated metadata while retaining stale local content.
+- Draft writes never change public content/URLs until guarded publication.
+- Agent tools retain never-throw ToolResult behavior, auth hooks and agent auditing.
+  The minimal example's kill switch is not production authentication; MCP also needs
+  its configured secret. Do not guess a production role policy.
+- Keep secrets in ignored `.dev.vars`, never source. Do not deploy or mutate live
+  Cloudflare/provider resources as part of a dependency refresh.
+- Keep applied migrations unchanged. Add migrations and test upgrade/fresh schemas.
+  New snapshot-aware revisions cannot be written by the old pre-split writer.
+- `docs/reference/agent-block-schemas.md` is historical generated reference: never
+  edit it by hand. Canonical schema/tool changes and generation happen upstream.
 
-## Where to make common changes
-
-See [docs/agent-task-map.md](./docs/agent-task-map.md) for a task → file map, and [docs/troubleshooting.md](./docs/troubleshooting.md) when something misbehaves.
+See [current integration notes](./docs/guides/current-package-integration.md) and
+[CONTRIBUTING.md](./CONTRIBUTING.md).

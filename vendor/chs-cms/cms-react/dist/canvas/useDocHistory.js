@@ -1,6 +1,6 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 const MAX_HISTORY = 80;
-/** Edits closer together than this are folded into one undo step. */
+/** Edits within this window from the group's first edit share one undo step. */
 const COALESCE_WINDOW_MS = 600;
 /**
  * Snapshot-based undo/redo over the whole document. Rapid edits (typing)
@@ -11,50 +11,51 @@ export function useDocHistory(initial) {
         past: [],
         present: initial,
         future: [],
+        lastPushAt: null,
     });
-    const lastPushRef = useRef(0);
     const set = useCallback((next) => {
+        const now = Date.now();
         setState((s) => {
-            const now = Date.now();
-            if (now - lastPushRef.current > COALESCE_WINDOW_MS) {
-                lastPushRef.current = now;
+            if (Object.is(s.present, next))
+                return s;
+            if (s.lastPushAt === null ||
+                now - s.lastPushAt > COALESCE_WINDOW_MS ||
+                now < s.lastPushAt) {
                 return {
                     past: [...s.past.slice(-(MAX_HISTORY - 1)), s.present],
                     present: next,
                     future: [],
+                    lastPushAt: now,
                 };
             }
-            return { past: s.past, present: next, future: [] };
+            return { ...s, present: next, future: [] };
         });
     }, []);
     /** Replace the document without recording history (initial load, restore). */
     const reset = useCallback((next) => {
-        lastPushRef.current = 0;
-        setState({ past: [], present: next, future: [] });
+        setState({ past: [], present: next, future: [], lastPushAt: null });
     }, []);
     const undo = useCallback(() => {
-        lastPushRef.current = 0;
         setState((s) => {
-            const previous = s.past[s.past.length - 1];
-            if (previous === undefined)
+            if (s.past.length === 0)
                 return s;
             return {
                 past: s.past.slice(0, -1),
-                present: previous,
+                present: s.past[s.past.length - 1],
                 future: [s.present, ...s.future],
+                lastPushAt: null,
             };
         });
     }, []);
     const redo = useCallback(() => {
-        lastPushRef.current = 0;
         setState((s) => {
-            const next = s.future[0];
-            if (next === undefined)
+            if (s.future.length === 0)
                 return s;
             return {
                 past: [...s.past, s.present],
-                present: next,
+                present: s.future[0],
                 future: s.future.slice(1),
+                lastPushAt: null,
             };
         });
     }, []);

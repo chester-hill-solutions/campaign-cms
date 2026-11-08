@@ -2,21 +2,23 @@
 
 Integration harness and examples for [`@chester-hill-solutions/cms-*`](https://github.com/chester-hill-solutions/chester-hill-solutions) packages.
 
-Runtime CMS libraries live in the **chester-hill-solutions** monorepo and install from GitHub Packages. This repo validates those packages end-to-end with runnable examples.
+Runtime CMS libraries live in the **chester-hill-solutions** monorepo. This repo vendors reviewed built artifacts and validates their host contracts with runnable examples.
 
-## Install packages
+## Install and verify
 
-Classic PAT with `read:packages` + `repo` (SSO authorized for the org):
-
-```bash
-export NODE_AUTH_TOKEN=ghp_xxxxxxxx
-```
-
-Root `.npmrc` is committed; it references `${NODE_AUTH_TOKEN}`.
+The examples use reviewed, checked-in CMS artifacts through local file dependencies.
+No private registry token or unpublished package version is needed for this harness.
+Use Node.js 22, matching CI:
 
 ```bash
-npm install
+npm ci --legacy-peer-deps
+npm run typecheck
+npm test
+npm run build
 ```
+
+`npm test` checks artifact provenance and actual isolated Worker D1/R2 contracts,
+with external calls disabled. See [current integration and migration notes](./docs/guides/current-package-integration.md).
 
 ## Examples
 
@@ -40,12 +42,13 @@ wrangler d1 migrations apply my-campaign-cms --local
 | Package | Repository |
 |---------|------------|
 | `@chester-hill-solutions/cms-core` | [packages/cms-core](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/main/packages/cms-core) |
-| `@chester-hill-solutions/cms-server` | [packages/cms-server](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/main/packages/cms-server) |
+| `@chester-hill-solutions/cms-store` | [packages/cms-store](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/main/packages/cms-store) |
+| `@chester-hill-solutions/cms-store-d1` | [packages/cms-store-d1](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/main/packages/cms-store-d1) |
 | `@chester-hill-solutions/cms-react` | [packages/cms-react](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/main/packages/cms-react) |
 | `@chester-hill-solutions/cms-agent` | [packages/cms-agent](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/main/packages/cms-agent) |
 | `@chester-hill-solutions/cms-setup` | [packages/cms-setup](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/main/packages/cms-setup) |
 
-Consumer setup: [USING-PACKAGES.md](https://github.com/chester-hill-solutions/chester-hill-solutions/blob/main/docs/USING-PACKAGES.md)
+Artifact hashes: [provenance.json](./vendor/chs-cms/provenance.json). Consumer registry setup: [USING-PACKAGES.md](https://github.com/chester-hill-solutions/chester-hill-solutions/blob/main/docs/USING-PACKAGES.md)
 
 ## Branch policy
 

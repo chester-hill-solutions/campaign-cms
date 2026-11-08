@@ -1,7 +1,7 @@
 {
   "name": "@chester-hill-solutions/cms-setup",
-  "version": "0.1.1",
-  "description": "Setup CLI for Campaign CMS: copies D1 migrations, prints wrangler bindings, and generates a CMS_SETUP.md checklist",
+  "version": "0.6.0",
+  "description": "CMS schema and setup CLI: the DDL for D1 and Postgres, plus a CLI that copies migrations, prints wrangler bindings, and generates a CMS_SETUP.md checklist",
   "type": "module",
   "license": "MIT",
   "repository": {
@@ -12,16 +12,23 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
-  "files": ["bin", "sql", "templates"],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "bin",
+    "dist",
+    "sql",
+    "templates"
+  ],
   "bin": {
     "cms-setup": "./bin/cms-setup.mjs"
   },
-  "scripts": {
-    "test": "bun test src/",
-    "typecheck": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "bun-types": "^1.3.5",
-    "typescript": "^5.9.2"
-  }
+  "gitHead": "b0e82399081cf1b52f7d23456cdb2de637f21163"
 }

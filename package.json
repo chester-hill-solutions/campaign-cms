@@ -22,19 +22,25 @@
     "example:dev": "npm run dev -w campaign-cms-minimal-site",
     "example:pages:dev": "npm run dev -w campaign-cms-gh-pages",
     "example:pages:build": "VITE_BASE=/campaign-cms/ npm run build -w campaign-cms-gh-pages",
-    "typecheck": "npm run typecheck -w campaign-cms-minimal-site && npm run typecheck -w campaign-cms-gh-pages"
+    "typecheck": "npm run typecheck -w campaign-cms-minimal-site && npm run typecheck -w campaign-cms-gh-pages",
+    "test": "npm run check:vendor && WRANGLER_SEND_METRICS=false node --test tests/*.test.mjs",
+    "check:vendor": "node scripts/check-cms-vendor.mjs",
+    "build": "npm run build -w campaign-cms-minimal-site && npm run example:pages:build"
   },
   "overrides": {
     "react": "$react",
     "react-dom": "$react-dom",
     "@chester-hill-solutions/cms-core": "file:vendor/chs-cms/cms-core",
-    "@chester-hill-solutions/cms-server": "file:vendor/chs-cms/cms-server",
+    "@chester-hill-solutions/cms-store": "file:vendor/chs-cms/cms-store",
+    "@chester-hill-solutions/cms-store-d1": "file:vendor/chs-cms/cms-store-d1",
     "@chester-hill-solutions/cms-react": "file:vendor/chs-cms/cms-react",
     "@chester-hill-solutions/cms-agent": "file:vendor/chs-cms/cms-agent",
     "@chester-hill-solutions/cms-setup": "file:vendor/chs-cms/cms-setup"
   },
   "devDependencies": {
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "miniflare": "4.20260623.0",
+    "esbuild": "0.28.1"
   }
 }

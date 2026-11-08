@@ -11,13 +11,16 @@ type Options<T> = {
         ok: false;
         error: string;
     }>;
+    /** Pause background saves without hiding unsaved work from navigation guards. */
+    paused?: boolean;
+    initialSavedContent?: T;
     delayMs?: number;
 };
 /**
  * Debounced autosave with an explicit `flush` (used by Cmd+S and Publish).
  * Tracks dirtiness against the last successfully saved snapshot.
  */
-export declare function useAutosave<T>({ content, ready, valid, save, delayMs, }: Options<T>): {
+export declare function useAutosave<T>({ content, ready, valid, save, initialSavedContent, paused, delayMs, }: Options<T>): {
     status: AutosaveStatus;
     error: string | null;
     dirty: boolean;

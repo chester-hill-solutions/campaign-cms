@@ -1,4 +1,5 @@
 import type { PageBlock } from '@chester-hill-solutions/cms-core';
+import type { BlockSelection } from '../canvas/selection';
 /**
  * Edit context for the admin page builder canvas. On the public site this
  * context is absent and every editable primitive renders plain content,
@@ -6,9 +7,25 @@ import type { PageBlock } from '@chester-hill-solutions/cms-core';
  */
 export type BlockEditApi = {
     updateBlock: (block: PageBlock) => void;
+    /** Selected block on the canvas (for item highlight). */
+    selectedBlockId?: string | null;
+    selectedItemId?: string | null;
+    selectedItemIndex?: number | null;
+    /** Select a nested item (or block-only selection) from canvas chrome. */
+    selectItem?: (selection: BlockSelection) => void;
 };
+/** Stop bubble to block chrome and select a nested canvas item. */
+export declare function selectCanvasItem(edit: BlockEditApi | null, selection: BlockSelection, event?: {
+    stopPropagation: () => void;
+}): void;
 export declare const BlockEditProvider: import("react").Provider<BlockEditApi | null>;
 export declare function useBlockEdit(): BlockEditApi | null;
+/** Whether a nested item should show structure-selection chrome. */
+export declare function isCanvasItemSelected(edit: BlockEditApi | null, blockId: string, opts: {
+    itemId?: string;
+    itemIndex?: number;
+}): boolean;
+export declare const CANVAS_ITEM_SELECTED_CLASS = "ring-2 ring-accent-orange ring-offset-2 ring-offset-surface-page";
 type EditableTextProps = {
     value: string;
     /** Produce the next block from the edited value. Only called in edit mode. */

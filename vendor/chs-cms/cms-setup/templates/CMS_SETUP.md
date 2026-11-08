@@ -34,10 +34,10 @@ wrangler d1 migrations apply __DB_NAME__ --remote   # production
 1. **Server store** — create a CMS store with your bindings and payload schema:
 
    ```ts
-   import { createCmsStore } from "@chester-hill-solutions/cms-server";
+   import { createCmsStoreD1 } from "@chester-hill-solutions/cms-store-d1";
    import { env } from "cloudflare:workers";
 
-   export const store = createCmsStore(() => ({ db: env.DB, media: env.MEDIA }), {
+   export const store = createCmsStoreD1(() => ({ db: env.DB, media: env.MEDIA }), {
      parsePayload, // zod-based parser for your revision payload union
      newPageDoc,
      validateNewPageSlug,
@@ -67,7 +67,8 @@ wrangler d1 migrations apply __DB_NAME__ --remote   # production
 The components use Tailwind classes plus a small set of CSS variables. Either:
 
 - import `@chester-hill-solutions/cms-react/styles/cms-tokens.css` for the defaults, or
-- define the `--ink`, `--ink-muted`, `--accent-*`, `--surface-*` variables in your own theme.
+- define the `--ink`, `--ink-muted`, `--accent-*`, `--surface-*` variables in your own theme, or
+- load a DB-backed theme with `store.getSiteTheme()` and inject it via `<ThemeStyle theme={theme} />` in the document head (migration `0006_site_theme.sql`). Admin editing: `ThemeSettingsPanel`.
 
 Add the package to Tailwind content scanning in your main CSS file:
 

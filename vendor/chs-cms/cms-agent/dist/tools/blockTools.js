@@ -1,8 +1,8 @@
 import { createBlockId, insertBlockAt, pageBlockSchema, reorderBlocksInPage, } from '@chester-hill-solutions/cms-core';
-import { toolError } from '../errors';
-import { applyDraftMutation } from '../pipeline';
-import { addBlockInput, duplicateBlockInput, removeBlockInput, reorderBlockInput, updateBlockInput, } from '../schemas';
-import { makeTool } from './makeTool';
+import { toolError } from '../errors.js';
+import { applyDraftMutation } from '../pipeline.js';
+import { addBlockInput, duplicateBlockInput, removeBlockInput, reorderBlockInput, updateBlockInput, } from '../schemas.js';
+import { makeTool } from './makeTool.js';
 function findBlockIndex(content, blockId) {
     const index = content.blocks.findIndex((b) => b.id === blockId);
     if (index < 0) {

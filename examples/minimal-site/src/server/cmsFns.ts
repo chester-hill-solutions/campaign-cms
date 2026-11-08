@@ -1,13 +1,14 @@
 import { createServerFn } from '@tanstack/react-start'
 
-import type { PageDocPayload } from '@chester-hill-solutions/cms-core'
-
+import { cmsStore, getPageDocEditorState, getPublishedPageDocBySlug } from '../lib/cms/content.server'
 import {
-  getPageDocEditorState,
-  getPublishedPageDocBySlug,
-  publishEntry,
-  savePageDocDraft,
-} from '../lib/cms/content.server'
+  publishEditorDraft,
+  publishPageInputSchema,
+  saveDraftInputSchema,
+  saveEditorDraft,
+  type PublishPageInput,
+  type SaveDraftInput,
+} from '../lib/cms/editorMutations.server'
 
 export const loadPublicPageFn = createServerFn({ method: 'GET' })
   .inputValidator((slug: string) => slug)
@@ -18,12 +19,9 @@ export const loadEditorStateFn = createServerFn({ method: 'GET' })
   .handler(async ({ data: entryId }) => getPageDocEditorState(entryId))
 
 export const saveDraftFn = createServerFn({ method: 'POST' })
-  .inputValidator((input: { entryId: string; payload: PageDocPayload }) => input)
-  .handler(async ({ data }) => {
-    const { kind: _k, version: _v, ...content } = data.payload
-    return savePageDocDraft(data.entryId, content)
-  })
+  .inputValidator((input: SaveDraftInput) => saveDraftInputSchema.parse(input))
+  .handler(async ({ data }) => saveEditorDraft(cmsStore, data))
 
 export const publishPageFn = createServerFn({ method: 'POST' })
-  .inputValidator((entryId: string) => entryId)
-  .handler(async ({ data: entryId }) => publishEntry(entryId))
+  .inputValidator((input: PublishPageInput) => publishPageInputSchema.parse(input))
+  .handler(async ({ data }) => publishEditorDraft(cmsStore, data))

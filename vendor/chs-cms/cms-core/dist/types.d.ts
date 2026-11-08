@@ -1,3 +1,4 @@
+import type { EntryListingSnapshot } from './listingSnapshot.js';
 /** Row shape of the `content_entries` table. */
 export type ContentEntryRow = {
     id: string;
@@ -8,7 +9,11 @@ export type ContentEntryRow = {
     published_revision_id: string | null;
     draft_revision_id: string | null;
 };
-export type PageDocListRow = ContentEntryRow & {
+export type PageDocEntryRow = ContentEntryRow & {
+    published_at: string | null;
+    updated_at: string | null;
+};
+export type PageDocListRow = PageDocEntryRow & {
     statusLabel: string;
 };
 export type EntryEditorMeta = {
@@ -22,6 +27,8 @@ export type EntryEditorState<TPayload> = {
     entry: ContentEntryRow;
     published: TPayload | null;
     draft: TPayload | null;
+    draftListing: EntryListingSnapshot | null;
+    publishedListing: EntryListingSnapshot | null;
     meta: EntryEditorMeta;
 };
 export type RevisionListRow = {

@@ -1,5 +1,7 @@
 # Store API reference
 
+> Historical pre-split reference. Use the [current package integration and guarded-write guide](../guides/current-package-integration.md) for this harness; the old cms-server/unconditional-write examples below are not the current contract.
+
 Methods returned by `createCmsStore(getBindings, config)`.
 
 ## Content reads
