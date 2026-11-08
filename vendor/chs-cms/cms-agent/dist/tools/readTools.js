@@ -1,7 +1,7 @@
 import { APP_BLOCK_TYPES, BLOCK_TYPE_LABELS, LAYOUT_BLOCK_TYPES, pageBlockSchema, } from '@chester-hill-solutions/cms-core';
-import { notFound } from '../errors';
-import { checkSlugInput, getBlockTypesInput, getPageInput, listMediaInput, listPagesInput, listRevisionsInput, } from '../schemas';
-import { makeTool } from './makeTool';
+import { notFound } from '../errors.js';
+import { checkSlugInput, getBlockTypesInput, getPageInput, listMediaInput, listPagesInput, listRevisionsInput, } from '../schemas.js';
+import { makeTool } from './makeTool.js';
 /** Shared base fields present on every block; not listed per type. */
 const BLOCK_BASE_FIELDS = new Set(['id', 'type', 'layout']);
 const LAYOUT_TYPE_SET = new Set(LAYOUT_BLOCK_TYPES);
@@ -57,7 +57,7 @@ export function createReadTools(store, config) {
                 if (!state) {
                     return notFound(`Entry "${entryId}"`, 'Call list_pages for valid ids.');
                 }
-                const { entry, meta, draft, published } = state;
+                const { entry, meta, draft, published, draftListing, publishedListing } = state;
                 if (view === 'summary') {
                     const base = draft ?? published;
                     return {
@@ -65,6 +65,8 @@ export function createReadTools(store, config) {
                         data: {
                             entry,
                             meta,
+                            draftListing,
+                            publishedListing,
                             blocks: base ? base.blocks.map(summarizeBlock) : [],
                         },
                     };
@@ -74,8 +76,8 @@ export function createReadTools(store, config) {
                     data: {
                         entry,
                         meta,
-                        ...(view !== 'published' ? { draft } : {}),
-                        ...(view !== 'draft' ? { published } : {}),
+                        ...(view !== 'published' ? { draft, draftListing } : {}),
+                        ...(view !== 'draft' ? { published, publishedListing } : {}),
                     },
                 };
             },

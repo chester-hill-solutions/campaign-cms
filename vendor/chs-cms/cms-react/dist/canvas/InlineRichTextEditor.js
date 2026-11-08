@@ -11,7 +11,7 @@ function ToolbarButton({ label, active, onRun, children, }) {
             onRun();
         }, children: children }));
 }
-function RichTextToolbar({ editor }) {
+function RichTextToolbar({ editor, inline = false }) {
     const state = useEditorState({
         editor,
         selector: (ctx) => ({
@@ -27,7 +27,7 @@ function RichTextToolbar({ editor }) {
         }),
     });
     const iconClass = 'h-4 w-4';
-    return (_jsxs("div", { className: "pb-richtext-toolbar absolute -top-9 left-0 z-30 flex items-center gap-0.5 rounded-lg border border-border-subtle bg-surface-card p-0.5 shadow-lg", role: "toolbar", "aria-label": "Text formatting", children: [_jsx(ToolbarButton, { label: "Bold", active: state.bold, onRun: () => editor.chain().focus().toggleBold().run(), children: _jsx(Bold, { className: iconClass, "aria-hidden": "true" }) }), _jsx(ToolbarButton, { label: "Italic", active: state.italic, onRun: () => editor.chain().focus().toggleItalic().run(), children: _jsx(Italic, { className: iconClass, "aria-hidden": "true" }) }), _jsx(ToolbarButton, { label: "Link", active: state.link, onRun: () => {
+    return (_jsxs("div", { className: `pb-richtext-toolbar flex items-center gap-0.5 border border-border-subtle bg-surface-card p-0.5 ${inline ? 'pb-richtext-toolbar--inline flex-wrap rounded-t-lg' : 'absolute -top-9 left-0 z-30 rounded-lg shadow-lg'}`, role: "toolbar", "aria-label": "Text formatting", children: [_jsx(ToolbarButton, { label: "Bold", active: state.bold, onRun: () => editor.chain().focus().toggleBold().run(), children: _jsx(Bold, { className: iconClass, "aria-hidden": "true" }) }), _jsx(ToolbarButton, { label: "Italic", active: state.italic, onRun: () => editor.chain().focus().toggleItalic().run(), children: _jsx(Italic, { className: iconClass, "aria-hidden": "true" }) }), _jsx(ToolbarButton, { label: "Link", active: state.link, onRun: () => {
                     if (state.link) {
                         editor.chain().focus().unsetLink().run();
                         return;
@@ -38,7 +38,7 @@ function RichTextToolbar({ editor }) {
                     editor.chain().focus().setLink({ href }).run();
                 }, children: _jsx(LinkIcon, { className: iconClass, "aria-hidden": "true" }) }), _jsx("span", { className: "mx-0.5 h-5 w-px bg-border-subtle", "aria-hidden": "true" }), _jsx(ToolbarButton, { label: "Paragraph", active: state.paragraph, onRun: () => editor.chain().focus().setParagraph().run(), children: _jsx(Pilcrow, { className: iconClass, "aria-hidden": "true" }) }), _jsx(ToolbarButton, { label: "Heading 2", active: state.h2, onRun: () => editor.chain().focus().toggleHeading({ level: 2 }).run(), children: _jsx(Heading2, { className: iconClass, "aria-hidden": "true" }) }), _jsx(ToolbarButton, { label: "Heading 3", active: state.h3, onRun: () => editor.chain().focus().toggleHeading({ level: 3 }).run(), children: _jsx(Heading3, { className: iconClass, "aria-hidden": "true" }) }), _jsx("span", { className: "mx-0.5 h-5 w-px bg-border-subtle", "aria-hidden": "true" }), _jsx(ToolbarButton, { label: "Bullet list", active: state.bulletList, onRun: () => editor.chain().focus().toggleBulletList().run(), children: _jsx(List, { className: iconClass, "aria-hidden": "true" }) }), _jsx(ToolbarButton, { label: "Numbered list", active: state.orderedList, onRun: () => editor.chain().focus().toggleOrderedList().run(), children: _jsx(ListOrdered, { className: iconClass, "aria-hidden": "true" }) }), _jsx(ToolbarButton, { label: "Quote", active: state.blockquote, onRun: () => editor.chain().focus().toggleBlockquote().run(), children: _jsx(TextQuote, { className: iconClass, "aria-hidden": "true" }) })] }));
 }
-export default function InlineRichTextEditor({ value, onChange }) {
+export default function InlineRichTextEditor({ value, onChange, label = 'Content', disabled = false, toolbar = 'floating' }) {
     const onChangeRef = useRef(onChange);
     onChangeRef.current = onChange;
     const lastEmittedRef = useRef(null);
@@ -47,8 +47,9 @@ export default function InlineRichTextEditor({ value, onChange }) {
         content: value,
         contentType: 'markdown',
         immediatelyRender: false,
+        editable: !disabled,
         editorProps: {
-            attributes: { class: 'pb-richtext' },
+            attributes: { class: 'pb-richtext', role: 'textbox', 'aria-label': label, 'aria-multiline': 'true' },
         },
         onUpdate: ({ editor: e }) => {
             const markdown = normalizeCmsMarkdown(e.getMarkdown());
@@ -71,9 +72,12 @@ export default function InlineRichTextEditor({ value, onChange }) {
             lastEmittedRef.current = value;
         }
     }, [editor, value]);
+    useEffect(() => {
+        editor?.setEditable(!disabled, false);
+    }, [editor, disabled]);
     const focused = useEditorState({
         editor,
         selector: (ctx) => ctx.editor?.isFocused ?? false,
     });
-    return (_jsxs("div", { className: "pb-richtext-wrap relative", children: [focused && editor ? _jsx(RichTextToolbar, { editor: editor }) : null, _jsx(EditorContent, { editor: editor })] }));
+    return (_jsxs("div", { className: "pb-richtext-wrap relative", children: [!disabled && editor && (toolbar === 'inline' || focused) ? _jsx(RichTextToolbar, { editor: editor, inline: toolbar === 'inline' }) : null, _jsx(EditorContent, { editor: editor })] }));
 }

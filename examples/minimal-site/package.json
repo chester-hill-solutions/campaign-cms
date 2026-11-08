@@ -10,10 +10,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@chester-hill-solutions/cms-agent": "^0.1.1",
-    "@chester-hill-solutions/cms-core": "^0.1.1",
-    "@chester-hill-solutions/cms-react": "^0.1.1",
-    "@chester-hill-solutions/cms-server": "^0.1.1",
+    "@chester-hill-solutions/cms-agent": "file:../../vendor/chs-cms/cms-agent",
+    "@chester-hill-solutions/cms-core": "file:../../vendor/chs-cms/cms-core",
+    "@chester-hill-solutions/cms-react": "file:../../vendor/chs-cms/cms-react",
     "lucide-react": "^0.545.0",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.18",
@@ -25,10 +24,12 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tailwindcss": "^4.1.18",
-    "zod": "^4.3.6"
+    "zod": "^4.3.6",
+    "@chester-hill-solutions/cms-store-d1": "file:../../vendor/chs-cms/cms-store-d1",
+    "@chester-hill-solutions/cms-store": "file:../../vendor/chs-cms/cms-store"
   },
   "devDependencies": {
-    "@chester-hill-solutions/cms-setup": "^0.1.1",
+    "@chester-hill-solutions/cms-setup": "file:../../vendor/chs-cms/cms-setup",
     "@cloudflare/vite-plugin": "^1.31.2",
     "@cloudflare/workers-types": "^4.20250110.0",
     "@rsbuild/core": "^2.0.0",

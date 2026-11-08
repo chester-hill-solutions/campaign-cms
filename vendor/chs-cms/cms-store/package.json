@@ -1,0 +1,37 @@
+{
+  "name": "@chester-hill-solutions/cms-store",
+  "version": "0.10.1",
+  "description": "Runtime-neutral CMS store ports and shared orchestration for D1 and Postgres adapters",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chester-hill-solutions/chester-hill-solutions.git",
+    "directory": "packages/cms-store"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "import": "./dist/testing/index.js",
+      "default": "./dist/testing/index.js"
+    }
+  },
+  "dependencies": {
+    "@chester-hill-solutions/cms-core": "file:../cms-core",
+    "zod": "^4.6.7"
+  },
+  "gitHead": "b0e82399081cf1b52f7d23456cdb2de637f21163"
+}

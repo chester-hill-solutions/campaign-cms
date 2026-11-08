@@ -9,13 +9,14 @@ type SegOption<T> = {
     label: string;
 };
 /** Compact segmented control for small enum fields. */
-export declare function SegmentedControl<T extends string | number>({ label, options, value, onChange, }: {
+export declare function SegmentedControl<T extends string | number>({ label, hint, options, value, onChange, }: {
     label: string;
+    hint?: string;
     options: ReadonlyArray<SegOption<T>>;
     value: T;
     onChange: (value: T) => void;
 }): import("react").JSX.Element;
-/** CTA editor: clearing the label removes the CTA entirely. */
+/** Keep partial CTA edits intact; removing a button is an explicit action. */
 export declare function CtaFields({ label, cta, onChange, }: {
     label: string;
     cta: BlockCta | undefined;

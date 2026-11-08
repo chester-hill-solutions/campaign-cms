@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { mock } from 'bun:test';
 import { createDefaultBlock, } from '@chester-hill-solutions/cms-core';
 export function makePageMeta(overrides = {}) {
     return {
@@ -30,6 +30,8 @@ export function makeEditorState(content = makePageMeta(), entry = makeEntryRow()
     return {
         entry,
         draft: payload,
+        draftListing: { version: 1, collections: [], tags: [] },
+        publishedListing: null,
         published: null,
         meta: {
             entryExists: true,
@@ -42,20 +44,20 @@ export function makeEditorState(content = makePageMeta(), entry = makeEntryRow()
 }
 export function makeStore(overrides = {}) {
     return {
-        listPageDocEntriesWithStatus: vi.fn(async () => []),
-        getPageDocEditorState: vi.fn(async () => makeEditorState()),
-        getContentEntryRow: vi.fn(async () => makeEntryRow()),
-        listRevisionsForEntry: vi.fn(async () => []),
-        listMediaAssets: vi.fn(async () => []),
-        isPageDocSlugTaken: vi.fn(async () => false),
-        createPageDocEntry: vi.fn(async () => ({
+        listPageDocEntriesWithStatus: mock(async () => []),
+        getPageDocEditorState: mock(async () => makeEditorState()),
+        getContentEntryRow: mock(async () => makeEntryRow()),
+        listRevisionsForEntry: mock(async () => []),
+        listMediaAssets: mock(async () => []),
+        isPageDocSlugTaken: mock(async () => false),
+        createPageDocEntry: mock(async () => ({
             ok: true,
             entryId: 'page-new',
         })),
-        savePageDocDraft: vi.fn(async () => ({ ok: true })),
-        publishEntry: vi.fn(async () => ({ published: true })),
-        restoreRevisionAsDraft: vi.fn(async () => ({ ok: true })),
-        uploadMediaAsset: vi.fn(async () => ({
+        savePageDocDraft: mock(async () => ({ ok: true, revisionId: 'rev-saved' })),
+        publishEntry: mock(async () => ({ published: true })),
+        restoreRevisionAsDraft: mock(async () => ({ ok: true, revisionId: 'rev-restored' })),
+        uploadMediaAsset: mock(async () => ({
             ok: true,
             asset: {
                 id: 'media_1',
@@ -74,8 +76,8 @@ export function makeStore(overrides = {}) {
 }
 export function makeConfig(overrides = {}) {
     return {
-        assertCanRead: vi.fn(),
-        assertCanMutate: vi.fn(),
+        assertCanRead: mock(),
+        assertCanMutate: mock(),
         actorId: 'test-agent',
         validateNewPageSlug: () => null,
         entryIdFromPageSlug: (slug) => `page-${slug}`,

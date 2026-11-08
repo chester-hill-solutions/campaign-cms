@@ -1,4 +1,4 @@
-import { type PageBlock } from './blockSchemas';
+import { type PageBlock } from './blockSchemas.js';
 /** Host-tunable defaults used when inserting fresh blocks in the editor. */
 export type BlockFactoryDefaults = {
     /** Placeholder `src` for new image blocks (schema requires a non-empty path). */

@@ -7,7 +7,7 @@ Browser-based page builder demo — the real `EditorCanvas`, settings panel, and
 From the repo root:
 
 ```bash
-npm install
+npm ci --legacy-peer-deps
 npm run example:pages:dev
 # → http://localhost:3002
 ```
@@ -27,3 +27,7 @@ npm run preview -w campaign-cms-gh-pages
 Pushes to `main` deploy automatically via [`.github/workflows/gh-pages.yml`](../../.github/workflows/gh-pages.yml).
 
 **One-time repo setup:** Settings → Pages → Build and deployment → Source: **GitHub Actions**.
+
+The editor passes the current structured `BlockSelection` through the canvas and
+settings panel, reconciling it after edits/undo. Dependencies remain vendored; no
+registry publication is required to build this demo.

@@ -1,5 +1,7 @@
 # Getting started
 
+> Historical pre-split reference. Use the [current package integration and guarded-write guide](./guides/current-package-integration.md) for this harness; the old cms-server/unconditional-write examples below are not the current contract.
+
 This guide walks through adding Campaign CMS to a new TanStack Start site on Cloudflare Workers.
 
 ## Prerequisites

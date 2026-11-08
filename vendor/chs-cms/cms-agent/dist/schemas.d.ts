@@ -26,7 +26,7 @@ export declare const createPageInput: z.ZodObject<{
 }, z.core.$strip>;
 export declare const updatePageMetaInput: z.ZodObject<{
     entryId: z.ZodString;
-    expectedDraftRevisionId: z.ZodOptional<z.ZodString>;
+    expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
     title: z.ZodOptional<z.ZodString>;
     dek: z.ZodOptional<z.ZodString>;
     seoTitle: z.ZodOptional<z.ZodString>;
@@ -40,7 +40,7 @@ export declare const updatePageMetaInput: z.ZodObject<{
 }, z.core.$strip>;
 export declare const addBlockInput: z.ZodObject<{
     entryId: z.ZodString;
-    expectedDraftRevisionId: z.ZodOptional<z.ZodString>;
+    expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
     type: z.ZodEnum<{
         sectionHeader: "sectionHeader";
         twoUp: "twoUp";
@@ -66,23 +66,24 @@ export declare const addBlockInput: z.ZodObject<{
         eventsTeaser: "eventsTeaser";
         bioLinks: "bioLinks";
         donateEmbed: "donateEmbed";
+        collectionGrid: "collectionGrid";
     }>;
     index: z.ZodOptional<z.ZodNumber>;
 }, z.core.$strip>;
 export declare const updateBlockInput: z.ZodObject<{
     entryId: z.ZodString;
-    expectedDraftRevisionId: z.ZodOptional<z.ZodString>;
+    expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
     blockId: z.ZodString;
     patch: z.ZodRecord<z.ZodString, z.ZodUnknown>;
 }, z.core.$strip>;
 export declare const removeBlockInput: z.ZodObject<{
     entryId: z.ZodString;
-    expectedDraftRevisionId: z.ZodOptional<z.ZodString>;
+    expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
     blockId: z.ZodString;
 }, z.core.$strip>;
 export declare const reorderBlockInput: z.ZodObject<{
     entryId: z.ZodString;
-    expectedDraftRevisionId: z.ZodOptional<z.ZodString>;
+    expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
     blockId: z.ZodOptional<z.ZodString>;
     direction: z.ZodOptional<z.ZodEnum<{
         up: "up";
@@ -93,7 +94,7 @@ export declare const reorderBlockInput: z.ZodObject<{
 }, z.core.$strip>;
 export declare const duplicateBlockInput: z.ZodObject<{
     entryId: z.ZodString;
-    expectedDraftRevisionId: z.ZodOptional<z.ZodString>;
+    expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
     blockId: z.ZodString;
 }, z.core.$strip>;
 export declare const uploadMediaInput: z.ZodObject<{
@@ -111,10 +112,55 @@ export declare const uploadMediaInput: z.ZodObject<{
 }, z.core.$strip>;
 export declare const restoreRevisionInput: z.ZodObject<{
     entryId: z.ZodString;
+    expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
     revisionId: z.ZodString;
 }, z.core.$strip>;
 export declare const publishPageInput: z.ZodObject<{
     entryId: z.ZodString;
+    expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
+}, z.core.$strip>;
+export declare const listDomainEntriesInput: z.ZodObject<{
+    contentType: z.ZodOptional<z.ZodString>;
+    status: z.ZodOptional<z.ZodEnum<{
+        draft: "draft";
+        published: "published";
+    }>>;
+}, z.core.$strip>;
+export declare const getDomainEntryInput: z.ZodObject<{
+    entryId: z.ZodOptional<z.ZodString>;
+    contentType: z.ZodOptional<z.ZodString>;
+    slug: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+export declare const listDomainRevisionsInput: z.ZodObject<{
+    entryId: z.ZodString;
+}, z.core.$strip>;
+export declare const describeDomainContentInput: z.ZodObject<{
+    contentType: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+export declare const saveDomainDraftInput: z.ZodObject<{
+    entryId: z.ZodOptional<z.ZodString>;
+    create: z.ZodOptional<z.ZodObject<{
+        contentType: z.ZodString;
+        slug: z.ZodString;
+        locale: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+    title: z.ZodOptional<z.ZodString>;
+    payload: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+    expectedRevisionId: z.ZodNullable<z.ZodString>;
+    message: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+export declare const publishDomainEntryInput: z.ZodObject<{
+    entryId: z.ZodString;
+    expectedRevisionId: z.ZodString;
+}, z.core.$strip>;
+export declare const unpublishDomainEntryInput: z.ZodObject<{
+    entryId: z.ZodString;
+    expectedRevisionId: z.ZodString;
+}, z.core.$strip>;
+export declare const restoreDomainRevisionInput: z.ZodObject<{
+    entryId: z.ZodString;
+    revisionId: z.ZodString;
+    expectedRevisionId: z.ZodNullable<z.ZodString>;
 }, z.core.$strip>;
 export declare const cmsAgentToolSchemas: {
     readonly list_pages: z.ZodObject<{}, z.core.$strip>;
@@ -144,7 +190,7 @@ export declare const cmsAgentToolSchemas: {
     }, z.core.$strip>;
     readonly update_page_meta: z.ZodObject<{
         entryId: z.ZodString;
-        expectedDraftRevisionId: z.ZodOptional<z.ZodString>;
+        expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
         title: z.ZodOptional<z.ZodString>;
         dek: z.ZodOptional<z.ZodString>;
         seoTitle: z.ZodOptional<z.ZodString>;
@@ -158,7 +204,7 @@ export declare const cmsAgentToolSchemas: {
     }, z.core.$strip>;
     readonly add_block: z.ZodObject<{
         entryId: z.ZodString;
-        expectedDraftRevisionId: z.ZodOptional<z.ZodString>;
+        expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
         type: z.ZodEnum<{
             sectionHeader: "sectionHeader";
             twoUp: "twoUp";
@@ -184,23 +230,24 @@ export declare const cmsAgentToolSchemas: {
             eventsTeaser: "eventsTeaser";
             bioLinks: "bioLinks";
             donateEmbed: "donateEmbed";
+            collectionGrid: "collectionGrid";
         }>;
         index: z.ZodOptional<z.ZodNumber>;
     }, z.core.$strip>;
     readonly update_block: z.ZodObject<{
         entryId: z.ZodString;
-        expectedDraftRevisionId: z.ZodOptional<z.ZodString>;
+        expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
         blockId: z.ZodString;
         patch: z.ZodRecord<z.ZodString, z.ZodUnknown>;
     }, z.core.$strip>;
     readonly remove_block: z.ZodObject<{
         entryId: z.ZodString;
-        expectedDraftRevisionId: z.ZodOptional<z.ZodString>;
+        expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
         blockId: z.ZodString;
     }, z.core.$strip>;
     readonly reorder_block: z.ZodObject<{
         entryId: z.ZodString;
-        expectedDraftRevisionId: z.ZodOptional<z.ZodString>;
+        expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
         blockId: z.ZodOptional<z.ZodString>;
         direction: z.ZodOptional<z.ZodEnum<{
             up: "up";
@@ -211,7 +258,7 @@ export declare const cmsAgentToolSchemas: {
     }, z.core.$strip>;
     readonly duplicate_block: z.ZodObject<{
         entryId: z.ZodString;
-        expectedDraftRevisionId: z.ZodOptional<z.ZodString>;
+        expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
         blockId: z.ZodString;
     }, z.core.$strip>;
     readonly upload_media: z.ZodObject<{
@@ -229,10 +276,55 @@ export declare const cmsAgentToolSchemas: {
     }, z.core.$strip>;
     readonly restore_revision: z.ZodObject<{
         entryId: z.ZodString;
+        expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
         revisionId: z.ZodString;
     }, z.core.$strip>;
     readonly publish_page: z.ZodObject<{
         entryId: z.ZodString;
+        expectedDraftRevisionId: z.ZodNullable<z.ZodString>;
+    }, z.core.$strip>;
+    readonly list_domain_entries: z.ZodObject<{
+        contentType: z.ZodOptional<z.ZodString>;
+        status: z.ZodOptional<z.ZodEnum<{
+            draft: "draft";
+            published: "published";
+        }>>;
+    }, z.core.$strip>;
+    readonly get_domain_entry: z.ZodObject<{
+        entryId: z.ZodOptional<z.ZodString>;
+        contentType: z.ZodOptional<z.ZodString>;
+        slug: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>;
+    readonly list_domain_revisions: z.ZodObject<{
+        entryId: z.ZodString;
+    }, z.core.$strip>;
+    readonly describe_domain_content: z.ZodObject<{
+        contentType: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>;
+    readonly save_domain_draft: z.ZodObject<{
+        entryId: z.ZodOptional<z.ZodString>;
+        create: z.ZodOptional<z.ZodObject<{
+            contentType: z.ZodString;
+            slug: z.ZodString;
+            locale: z.ZodOptional<z.ZodString>;
+        }, z.core.$strip>>;
+        title: z.ZodOptional<z.ZodString>;
+        payload: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+        expectedRevisionId: z.ZodNullable<z.ZodString>;
+        message: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>;
+    readonly publish_domain_entry: z.ZodObject<{
+        entryId: z.ZodString;
+        expectedRevisionId: z.ZodString;
+    }, z.core.$strip>;
+    readonly unpublish_domain_entry: z.ZodObject<{
+        entryId: z.ZodString;
+        expectedRevisionId: z.ZodString;
+    }, z.core.$strip>;
+    readonly restore_domain_revision: z.ZodObject<{
+        entryId: z.ZodString;
+        revisionId: z.ZodString;
+        expectedRevisionId: z.ZodNullable<z.ZodString>;
     }, z.core.$strip>;
 };
 export type CmsAgentToolName = keyof typeof cmsAgentToolSchemas;
