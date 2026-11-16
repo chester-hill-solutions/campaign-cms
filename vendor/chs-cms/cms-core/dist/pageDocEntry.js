@@ -1,5 +1,5 @@
-import { createBlockId, DEFAULT_BLOCK_LAYOUT } from './blockSchemas';
-import { normalizeCmsSlug } from './slugs';
+import { createBlockId, DEFAULT_BLOCK_LAYOUT } from './blockSchemas.js';
+import { normalizeCmsSlug } from './slugs.js';
 export const DYNAMIC_PAGE_ENTRY_PREFIX = 'page-';
 /** True for known fixed pageDoc entry ids and dynamically created `page-*` ids. */
 export function isPageDocEntryId(entryId, knownEntryIds) {

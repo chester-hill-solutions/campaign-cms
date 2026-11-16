@@ -16,6 +16,8 @@ import {
   PageSettingsDrawer,
   useAutosave,
   useDocHistory,
+  reconcileSelection,
+  type BlockSelection,
   type Viewport,
 } from '@chester-hill-solutions/cms-react'
 
@@ -41,7 +43,7 @@ function initialMeta(): EntryEditorMeta {
 
 export function DemoEditor() {
   const [meta, setMeta] = useState<EntryEditorMeta>(initialMeta)
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [selection, setSelection] = useState<BlockSelection | null>(null)
   const [blockPanelOpen, setBlockPanelOpen] = useState(false)
   const [pageSettingsOpen, setPageSettingsOpen] = useState(false)
   const [viewport, setViewport] = useState<Viewport>('desktop')
@@ -54,7 +56,8 @@ export function DemoEditor() {
   const { content, set: setContent, reset, undo, redo, canUndo, canRedo } = history
 
   const validation = useMemo(() => validatePageDoc(content), [content])
-  const selectedBlock = content.blocks.find((b) => b.id === selectedId) ?? null
+  const resolvedSelection = useMemo(() => reconcileSelection(content.blocks, selection), [content.blocks, selection])
+  const selectedBlock = content.blocks.find((b) => b.id === resolvedSelection?.blockId) ?? null
 
   const persistDraft = useCallback(async (snapshot: PageMeta) => {
     saveDraft(snapshot)
@@ -88,9 +91,9 @@ export function DemoEditor() {
     }
   }
 
-  function onSelectBlock(id: string | null) {
-    setSelectedId(id)
-    if (id) {
+  function onSelectBlock(next: BlockSelection | null) {
+    setSelection(next)
+    if (next) {
       setBlockPanelOpen(true)
       setPageSettingsOpen(false)
     }
@@ -171,7 +174,7 @@ export function DemoEditor() {
               <EditorCanvas
                 content={content}
                 onChange={onChange}
-                selectedId={selectedId}
+                selection={resolvedSelection}
                 onSelect={onSelectBlock}
                 onOpenSettings={() => setBlockPanelOpen(true)}
                 onDelete={(id) => onChange(removeBlockFromPage(content, id))}
@@ -184,6 +187,7 @@ export function DemoEditor() {
         {blockPanelOpen && selectedBlock ? (
           <BlockSettingsPanel
             block={selectedBlock}
+            selection={resolvedSelection}
             errors={validation.byBlock.get(selectedBlock.id)}
             onChange={(block) => onChange(updateBlockInPage(content, block))}
             onClose={() => setBlockPanelOpen(false)}

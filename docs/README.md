@@ -4,11 +4,16 @@ Campaign CMS documentation for [Chester Hill Solutions](https://github.com/chest
 
 ## Start here
 
-1. [Getting started](./getting-started.md) — install, migrate, wire your first page
-2. [Architecture](./architecture.md) — packages, data model, request flows
-3. [Minimal site example](../examples/minimal-site/) — runnable demo
+1. [Current package integration](./guides/current-package-integration.md) — versions, guarded editor writes and schema rollout
+2. [Minimal site example](../examples/minimal-site/) — runnable D1/R2 demo
+3. [Repository README](../README.md) — install and verification
 
-## Guides
+## Historical guides
+
+These pre-split references preserve earlier architecture. Use the current integration guide above and canonical package docs for current APIs.
+
+- [Getting started](./getting-started.md)
+- [Architecture](./architecture.md)
 
 - [Host integration](./guides/host-integration.md)
 - [Public pages](./guides/public-pages.md)
@@ -26,10 +31,11 @@ Campaign CMS documentation for [Chester Hill Solutions](https://github.com/chest
 - [Task map](./agent-task-map.md)
 - [Troubleshooting](./troubleshooting.md)
 
-## Packages
+## Canonical packages
 
-- [@campaign/cms-core](../packages/cms-core/README.md)
-- [@campaign/cms-server](../packages/cms-server/README.md)
-- [@campaign/cms-react](../packages/cms-react/README.md)
-- [@campaign/cms-agent](../packages/cms-agent/)
-- [@campaign/cms-setup](../packages/cms-setup/README.md)
+- [@chester-hill-solutions/cms-core](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/b0e82399081cf1b52f7d23456cdb2de637f21163/packages/cms-core)
+- [@chester-hill-solutions/cms-store](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/b0e82399081cf1b52f7d23456cdb2de637f21163/packages/cms-store)
+- [@chester-hill-solutions/cms-store-d1](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/b0e82399081cf1b52f7d23456cdb2de637f21163/packages/cms-store-d1)
+- [@chester-hill-solutions/cms-react](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/b0e82399081cf1b52f7d23456cdb2de637f21163/packages/cms-react)
+- [@chester-hill-solutions/cms-agent](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/b0e82399081cf1b52f7d23456cdb2de637f21163/packages/cms-agent)
+- [@chester-hill-solutions/cms-setup](https://github.com/chester-hill-solutions/chester-hill-solutions/tree/b0e82399081cf1b52f7d23456cdb2de637f21163/packages/cms-setup)

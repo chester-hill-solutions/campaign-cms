@@ -1,8 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { sanitizeCustomHtml } from '@chester-hill-solutions/cms-core';
 import { createBlockId } from '@chester-hill-solutions/cms-core';
-import { AddItemButton, EditableMarkdown, EditableText, ItemControls, moveItem, useBlockEdit, } from './editable';
-import { cardGridColumnClass } from './layoutClasses';
+import { AddItemButton, CANVAS_ITEM_SELECTED_CLASS, EditableMarkdown, EditableText, isCanvasItemSelected, ItemControls, moveItem, selectCanvasItem, useBlockEdit, } from './editable';
+import { containerLayoutClasses, resolveContainerLayout } from './layoutClasses';
 const CALLOUT_TONE_CLASSES = {
     neutral: 'border-border-subtle bg-surface-elevated',
     info: 'border-accent-green bg-[color-mix(in_oklab,var(--accent-green)_10%,var(--surface-card)_90%)]',
@@ -17,7 +17,17 @@ const EMBED_ASPECT_CLASSES = {
 };
 export function StatGridBlockView({ block }) {
     const edit = useBlockEdit();
-    return (_jsxs("section", { "aria-labelledby": block.heading ? `stat-grid-${block.id}` : undefined, children: [block.heading || edit ? (_jsx("h2", { id: `stat-grid-${block.id}`, className: "m-0 mb-2 text-2xl font-semibold text-ink", children: _jsx(EditableText, { value: block.heading ?? '', placeholder: "Heading (optional)", update: (v) => ({ ...block, heading: v || undefined }) }) })) : null, block.subheading || edit ? (_jsx("p", { className: "m-0 mb-6 text-base text-ink-muted", children: _jsx(EditableText, { value: block.subheading ?? '', placeholder: "Subheading (optional)", update: (v) => ({ ...block, subheading: v || undefined }) }) })) : null, _jsx("div", { className: `grid gap-4 ${cardGridColumnClass(block.columns)}`, children: block.stats.map((stat, index) => (_jsxs("article", { className: "group/item relative rounded-xl border border-border-subtle bg-surface-elevated p-4 @sm:p-5", children: [edit ? (_jsx(ItemControls, { label: "stat", index: index, count: block.stats.length, onMove: (to) => edit.updateBlock({ ...block, stats: moveItem(block.stats, index, to) }), onRemove: () => edit.updateBlock({
+    return (_jsxs("section", { "aria-labelledby": block.heading ? `stat-grid-${block.id}` : undefined, children: [block.heading || edit ? (_jsx("h2", { id: `stat-grid-${block.id}`, className: "m-0 mb-2 text-2xl font-semibold text-ink", children: _jsx(EditableText, { value: block.heading ?? '', placeholder: "Heading (optional)", update: (v) => ({ ...block, heading: v || undefined }) }) })) : null, block.subheading || edit ? (_jsx("p", { className: "m-0 mb-6 text-base text-ink-muted", children: _jsx(EditableText, { value: block.subheading ?? '', placeholder: "Subheading (optional)", update: (v) => ({ ...block, subheading: v || undefined }) }) })) : null, _jsx("div", { className: containerLayoutClasses({
+                    ...resolveContainerLayout(block.container),
+                    columns: block.columns,
+                }), children: block.stats.map((stat, index) => (_jsxs("article", { className: `group/item relative rounded-xl border border-border-subtle bg-surface-elevated p-4 @sm:p-5 ${isCanvasItemSelected(edit, block.id, { itemId: stat.id })
+                        ? CANVAS_ITEM_SELECTED_CLASS
+                        : ''}`, onClick: (e) => selectCanvasItem(edit, {
+                        blockId: block.id,
+                        itemKind: 'stat',
+                        itemId: stat.id,
+                        itemIndex: index,
+                    }, e), children: [edit ? (_jsx(ItemControls, { label: "stat", index: index, count: block.stats.length, onMove: (to) => edit.updateBlock({ ...block, stats: moveItem(block.stats, index, to) }), onRemove: () => edit.updateBlock({
                                 ...block,
                                 stats: block.stats.filter((s) => s.id !== stat.id),
                             }) })) : null, _jsx("p", { className: "m-0 text-2xl font-bold text-ink @sm:text-3xl", children: _jsx(EditableText, { value: stat.value, placeholder: "Value", update: (v) => {
@@ -46,7 +56,14 @@ export function StatGridBlockView({ block }) {
 }
 export function TimelineBlockView({ block }) {
     const edit = useBlockEdit();
-    return (_jsxs("section", { "aria-labelledby": block.heading ? `timeline-${block.id}` : undefined, children: [block.heading || edit ? (_jsx("h2", { id: `timeline-${block.id}`, className: "m-0 mb-6 text-2xl font-semibold text-ink", children: _jsx(EditableText, { value: block.heading ?? '', placeholder: "Heading (optional)", update: (v) => ({ ...block, heading: v || undefined }) }) })) : null, _jsx("ol", { className: "m-0 grid gap-6 border-l-2 border-accent-orange pl-6", children: block.items.map((item, index) => (_jsxs("li", { className: "group/item relative", children: [_jsx("span", { className: "absolute -left-[calc(1.5rem+5px)] top-1.5 h-2.5 w-2.5 rounded-full bg-accent-orange", "aria-hidden": "true" }), edit ? (_jsx(ItemControls, { label: "milestone", index: index, count: block.items.length, onMove: (to) => edit.updateBlock({ ...block, items: moveItem(block.items, index, to) }), onRemove: () => edit.updateBlock({
+    return (_jsxs("section", { "aria-labelledby": block.heading ? `timeline-${block.id}` : undefined, children: [block.heading || edit ? (_jsx("h2", { id: `timeline-${block.id}`, className: "m-0 mb-6 text-2xl font-semibold text-ink", children: _jsx(EditableText, { value: block.heading ?? '', placeholder: "Heading (optional)", update: (v) => ({ ...block, heading: v || undefined }) }) })) : null, _jsx("ol", { className: "m-0 grid gap-6 border-l-2 border-accent-orange pl-6", children: block.items.map((item, index) => (_jsxs("li", { className: `group/item relative rounded-md ${isCanvasItemSelected(edit, block.id, { itemId: item.id })
+                        ? CANVAS_ITEM_SELECTED_CLASS
+                        : ''}`, onClick: (e) => selectCanvasItem(edit, {
+                        blockId: block.id,
+                        itemKind: 'timelineItem',
+                        itemId: item.id,
+                        itemIndex: index,
+                    }, e), children: [_jsx("span", { className: "absolute -left-[calc(1.5rem+5px)] top-1.5 h-2.5 w-2.5 rounded-full bg-accent-orange", "aria-hidden": "true" }), edit ? (_jsx(ItemControls, { label: "milestone", index: index, count: block.items.length, onMove: (to) => edit.updateBlock({ ...block, items: moveItem(block.items, index, to) }), onRemove: () => edit.updateBlock({
                                 ...block,
                                 items: block.items.filter((i) => i.id !== item.id),
                             }) })) : null, item.phase || edit ? (_jsx("p", { className: "m-0 text-xs font-semibold uppercase tracking-wide text-accent-orange", children: _jsx(EditableText, { value: item.phase ?? '', placeholder: "Phase (optional)", update: (v) => {
@@ -92,5 +109,5 @@ export function CustomHtmlBlockView({ block }) {
 }
 export function QuoteBlockView({ block }) {
     const edit = useBlockEdit();
-    return (_jsxs("blockquote", { className: "border-l-4 border-accent-orange pl-4", children: [_jsxs("p", { className: "m-0 text-lg italic leading-relaxed text-ink", children: ["\u201C", _jsx(EditableText, { value: block.text, multiline: true, placeholder: "Quote", update: (v) => ({ ...block, text: v }) }), "\u201D"] }), block.attribution || edit ? (_jsxs("footer", { className: "mt-2 text-sm text-ink-muted", children: ["\u2014", ' ', _jsx(EditableText, { value: block.attribution ?? '', placeholder: "Attribution (optional)", update: (v) => ({ ...block, attribution: v || undefined }) })] })) : null] }));
+    return (_jsxs("blockquote", { className: "my-6 rounded-r-xl border-l-4 border-accent-orange bg-surface-elevated px-5 py-4", children: [_jsxs("p", { className: "m-0 text-lg leading-relaxed text-ink", children: ["\u201C", _jsx(EditableText, { value: block.text, multiline: true, placeholder: "Quote", update: (v) => ({ ...block, text: v }) }), "\u201D"] }), block.attribution || edit ? (_jsxs("footer", { className: "mt-3 text-sm font-medium text-ink-muted", children: ["\u2014", ' ', _jsx(EditableText, { value: block.attribution ?? '', placeholder: "Attribution (optional)", update: (v) => ({ ...block, attribution: v || undefined }) })] })) : null] }));
 }

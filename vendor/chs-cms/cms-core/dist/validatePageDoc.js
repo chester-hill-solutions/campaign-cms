@@ -1,4 +1,4 @@
-import { pageDocPayloadSchema } from './blockSchemas';
+import { pageDocPayloadSchema } from './blockSchemas.js';
 const FIELD_LABELS = {
     seoTitle: 'SEO title',
     seoDescription: 'SEO description',

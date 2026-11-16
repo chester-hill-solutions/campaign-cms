@@ -1,4 +1,4 @@
-import type { PageMeta } from './pageBlockOps';
+import type { PageMeta } from './pageBlockOps.js';
 export type PageDocValidation = {
     ok: boolean;
     byBlock: ReadonlyMap<string, string[]>;

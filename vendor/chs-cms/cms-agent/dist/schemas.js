@@ -3,10 +3,10 @@ import { ALL_BLOCK_TYPES } from '@chester-hill-solutions/cms-core';
 const entryId = z.string().min(1).max(200);
 const blockId = z.string().min(1).max(64);
 /**
- * Optimistic concurrency token. When provided, the write fails with CONFLICT
+ * Required optimistic concurrency token. The write fails with CONFLICT
  * if the entry's current draft revision differs (someone edited in between).
  */
-const expectedDraftRevisionId = z.string().min(1).max(80).optional();
+const expectedDraftRevisionId = z.string().min(1).max(80).nullable();
 // ------------------------------------------------------------------- reads --
 export const listPagesInput = z.object({});
 export const getPageInput = z.object({
@@ -94,9 +94,66 @@ export const uploadMediaInput = z.object({
 });
 export const restoreRevisionInput = z.object({
     entryId,
+    expectedDraftRevisionId,
     revisionId: z.string().min(1).max(80),
 });
-export const publishPageInput = z.object({ entryId });
+export const publishPageInput = z.object({ entryId, expectedDraftRevisionId });
+const domainContentType = z.string().min(1).max(40);
+export const listDomainEntriesInput = z.object({
+    contentType: domainContentType.optional(),
+    status: z.enum(['draft', 'published']).optional(),
+});
+export const getDomainEntryInput = z
+    .object({
+    entryId: z.string().min(1).max(80).optional(),
+    contentType: domainContentType.optional(),
+    slug: z.string().min(1).max(120).optional(),
+})
+    .refine((value) => Boolean(value.entryId) !== Boolean(value.contentType && value.slug), {
+    message: 'Pass either entryId, or both contentType and slug.',
+});
+export const listDomainRevisionsInput = z.object({
+    entryId: z.string().min(1).max(80),
+});
+export const describeDomainContentInput = z.object({
+    contentType: domainContentType.optional(),
+});
+export const saveDomainDraftInput = z
+    .object({
+    entryId: z.string().min(1).max(80).optional(),
+    create: z
+        .object({
+        contentType: domainContentType,
+        slug: z.string().min(1).max(120),
+        locale: z.string().min(2).max(20).optional(),
+    })
+        .optional(),
+    title: z.string().max(300).optional(),
+    /**
+     * The payload is the host's contract, not this package's, so it is bounded in
+     * size and shape but not described here. `describe_domain_content` is how an
+     * agent learns what belongs in it.
+     */
+    payload: z.record(z.string(), z.unknown()),
+    expectedRevisionId: z.string().min(1).max(80).nullable(),
+    message: z.string().max(300).optional(),
+})
+    .refine((value) => Boolean(value.entryId) !== Boolean(value.create), {
+    message: 'Pass either entryId to update, or create to add a record.',
+});
+export const publishDomainEntryInput = z.object({
+    entryId: z.string().min(1).max(80),
+    expectedRevisionId: z.string().min(1).max(80),
+});
+export const unpublishDomainEntryInput = z.object({
+    entryId: z.string().min(1).max(80),
+    expectedRevisionId: z.string().min(1).max(80),
+});
+export const restoreDomainRevisionInput = z.object({
+    entryId: z.string().min(1).max(80),
+    revisionId: z.string().min(1).max(80),
+    expectedRevisionId: z.string().min(1).max(80).nullable(),
+});
 export const cmsAgentToolSchemas = {
     list_pages: listPagesInput,
     get_page: getPageInput,
@@ -114,4 +171,12 @@ export const cmsAgentToolSchemas = {
     upload_media: uploadMediaInput,
     restore_revision: restoreRevisionInput,
     publish_page: publishPageInput,
+    list_domain_entries: listDomainEntriesInput,
+    get_domain_entry: getDomainEntryInput,
+    list_domain_revisions: listDomainRevisionsInput,
+    describe_domain_content: describeDomainContentInput,
+    save_domain_draft: saveDomainDraftInput,
+    publish_domain_entry: publishDomainEntryInput,
+    unpublish_domain_entry: unpublishDomainEntryInput,
+    restore_domain_revision: restoreDomainRevisionInput,
 };

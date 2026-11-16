@@ -1,5 +1,5 @@
 import type { z } from 'zod';
-import type { AgentCallContext, PageMeta, ToolError, ToolResult } from './types';
+import type { AgentCallContext, PageMeta, ToolError, ToolResult } from './types.js';
 export declare function toolError(code: ToolError['code'], error: string, extra?: Pick<ToolError, 'fieldErrors' | 'suggestion' | 'retryable'>): ToolError;
 export declare function notFound(what: string, suggestion?: string): ToolError;
 export declare function forbidden(reason?: string): ToolError;

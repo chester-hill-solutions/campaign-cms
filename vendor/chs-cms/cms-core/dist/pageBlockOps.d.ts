@@ -1,5 +1,5 @@
-import { type PageBlock, type PageDocPayload } from './blockSchemas';
-import { type BlockFactoryDefaults } from './blockFactory';
+import { type PageBlock, type PageDocPayload } from './blockSchemas.js';
+import { type BlockFactoryDefaults } from './blockFactory.js';
 export type PageMeta = Omit<PageDocPayload, 'kind' | 'version'>;
 /** Insert a fresh default block at the given index. Returns the new block too. */
 export declare function insertBlockAt(content: PageMeta, type: PageBlock['type'], index: number, defaults?: BlockFactoryDefaults): {

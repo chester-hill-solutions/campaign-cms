@@ -1,5 +1,5 @@
 import { LoaderCircle } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import {
   removeBlockFromPage,
@@ -17,6 +17,8 @@ import {
   PageSettingsDrawer,
   useAutosave,
   useDocHistory,
+  reconcileSelection,
+  type BlockSelection,
   type Viewport,
 } from '@chester-hill-solutions/cms-react'
 
@@ -42,7 +44,10 @@ function toPageMeta(payload: PageDocPayload): PageMeta {
 export function PageEditor() {
   const [meta, setMeta] = useState<EntryEditorMeta>(EMPTY_META)
   const [ready, setReady] = useState(false)
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [conflict, setConflict] = useState(false)
+  const [publishedSlug, setPublishedSlug] = useState<string | null>(null)
+  const draftRevision = useRef<string | null>(null)
+  const [selection, setSelection] = useState<BlockSelection | null>(null)
   const [blockPanelOpen, setBlockPanelOpen] = useState(false)
   const [pageSettingsOpen, setPageSettingsOpen] = useState(false)
   const [viewport, setViewport] = useState<Viewport>('desktop')
@@ -62,12 +67,20 @@ export function PageEditor() {
   const { content, set: setContent, reset, undo, redo, canUndo, canRedo } = history
 
   const validation = useMemo(() => validatePageDoc(content), [content])
-  const selectedBlock = content.blocks.find((b) => b.id === selectedId) ?? null
+  const resolvedSelection = useMemo(() => reconcileSelection(content.blocks, selection), [content.blocks, selection])
+  const selectedBlock = content.blocks.find((b) => b.id === resolvedSelection?.blockId) ?? null
 
   const saveDraft = useCallback(async (snapshot: PageMeta) => {
     const payload: PageDocPayload = { kind: 'pageDoc', version: 1, ...snapshot }
-    const res = await saveDraftFn({ data: { entryId: DEMO_ENTRY_ID, payload } })
-    if (!res.ok) return { ok: false as const, error: 'Validation failed' }
+    const res = await saveDraftFn({ data: {
+      entryId: DEMO_ENTRY_ID, payload, expectedDraftRevisionId: draftRevision.current,
+    } })
+    if (!res.ok) {
+      if (res.conflict) setConflict(true)
+      return { ok: false as const, error: res.error }
+    }
+    draftRevision.current = res.revisionId
+    setMeta(current => ({ ...current, entryExists: true, hasDraft: true, hasUnpublishedChanges: true }))
     return { ok: true as const }
   }, [])
 
@@ -75,6 +88,7 @@ export function PageEditor() {
     content,
     ready,
     valid: validation.ok,
+    paused: conflict,
     save: saveDraft,
   })
 
@@ -84,7 +98,9 @@ export function PageEditor() {
         setReady(true)
         return
       }
+      draftRevision.current = state.entry.draft_revision_id
       setMeta(state.meta)
+      setPublishedSlug(state.published?.slug ?? null)
       const payload = state.draft ?? state.published
       if (payload) {
         reset(toPageMeta(payload))
@@ -98,9 +114,9 @@ export function PageEditor() {
     setContent(next)
   }
 
-  function onSelectBlock(id: string | null) {
-    setSelectedId(id)
-    if (id) {
+  function onSelectBlock(next: BlockSelection | null) {
+    setSelection(next)
+    if (next) {
       setBlockPanelOpen(true)
       setPageSettingsOpen(false)
     }
@@ -109,17 +125,32 @@ export function PageEditor() {
   async function handlePublish() {
     setPublishPending(true)
     setPublishMessage(null)
-    const saved = await flush()
-    if (!saved) {
+    try {
+      if (conflict || !await flush()) return
+      const expectedDraftRevisionId = draftRevision.current
+      if (!expectedDraftRevisionId) {
+        setPublishMessage('Save a draft before publishing')
+        return
+      }
+      const res = await publishPageFn({ data: { entryId: DEMO_ENTRY_ID, expectedDraftRevisionId } })
+      if (!res.ok) {
+        if (res.conflict) setConflict(true)
+        setPublishMessage(res.error)
+        return
+      }
+      setPublishMessage(res.published ? 'Published' : 'Already live')
+      const state = await loadEditorStateFn({ data: DEMO_ENTRY_ID })
+      // This refresh is metadata only; a different draft must not advance our save guard.
+      if (state) {
+        setMeta(state.meta)
+        setPublishedSlug(state.published?.slug ?? null)
+      }
+      window.setTimeout(() => setPublishMessage(null), 3000)
+    } catch {
+      setPublishMessage('Publish failed — your local edits are preserved')
+    } finally {
       setPublishPending(false)
-      return
     }
-    const res = await publishPageFn({ data: DEMO_ENTRY_ID })
-    setPublishMessage(res.published ? 'Published' : 'Already live')
-    const state = await loadEditorStateFn({ data: DEMO_ENTRY_ID })
-    if (state) setMeta(state.meta)
-    setPublishPending(false)
-    window.setTimeout(() => setPublishMessage(null), 3000)
   }
 
   if (!ready) {
@@ -138,7 +169,7 @@ export function PageEditor() {
           <EditorTopBar
             title={content.title}
             meta={meta}
-            publicPath={content.slug ? cmsPagePublicPath(content.slug) : null}
+            publicPath={publishedSlug === null ? null : cmsPagePublicPath(publishedSlug)}
             pagesListHref={null}
             saveStatus={status}
             saveError={error}
@@ -155,9 +186,19 @@ export function PageEditor() {
               setBlockPanelOpen(false)
             }}
             publishPending={publishPending}
+            publishDisabled={conflict}
             onPublish={() => void handlePublish()}
             publishMessage={publishMessage}
           />
+
+          {conflict ? (
+            <p role="alert" className="mb-4 text-sm text-ink-muted">
+              This draft changed elsewhere. Your edits are still here.{' '}
+              <button type="button" className="underline" onClick={() => window.location.reload()}>
+                Reload latest draft and discard local changes
+              </button>
+            </p>
+          ) : null}
 
           <div
             className={`mx-auto transition-[max-width] duration-200 ${
@@ -168,7 +209,7 @@ export function PageEditor() {
               <EditorCanvas
                 content={content}
                 onChange={onChange}
-                selectedId={selectedId}
+                selection={resolvedSelection}
                 onSelect={onSelectBlock}
                 onOpenSettings={() => setBlockPanelOpen(true)}
                 onDelete={(id) => onChange(removeBlockFromPage(content, id))}
@@ -181,6 +222,7 @@ export function PageEditor() {
         {blockPanelOpen && selectedBlock ? (
           <BlockSettingsPanel
             block={selectedBlock}
+            selection={resolvedSelection}
             errors={validation.byBlock.get(selectedBlock.id)}
             onChange={(block) => onChange(updateBlockInPage(content, block))}
             onClose={() => setBlockPanelOpen(false)}

@@ -1,46 +1,33 @@
 # Contributing
 
-## Before opening a PR
+Use a feature branch from current main. This repository owns host examples and
+integration coverage; CMS schemas, renderer mechanics and agent tools live in the
+[canonical monorepo](https://github.com/chester-hill-solutions/chester-hill-solutions).
+
+Before opening a PR:
 
 ```bash
-npm run typecheck   # must pass — CI enforces it
-npm test            # must pass — CI enforces it
+npm ci --legacy-peer-deps
+npm run typecheck
+npm test
+npm run build
 ```
 
-## Checklists
+`npm test` verifies all vendored artifact hashes, then exercises actual local
+workerd D1/R2 bindings. It checks stale save/publish refusal, draft/public isolation,
+agent gating/auditing and media round trips without a real provider account.
 
-### Adding or changing a block type
+For a package refresh, retain the existing vendor distribution mode and record
+source/tarball/file hashes plus only the required sibling dependency rewrites.
+Preserve compatible external versions and migration history. Do not point a ready
+PR at an unpublished registry version, hand-edit generated library files, or infer
+permission for a production migration/deployment.
 
-- [ ] Schema added to `pageBlockSchema` union in `packages/cms-core/src/blockSchemas.ts`
-- [ ] Type added to the right group constant (`LAYOUT_` / `CONTENT_` / `APP_BLOCK_TYPES`) and `BLOCK_TYPE_LABELS`
-- [ ] Default case in `createDefaultBlock` (`blockFactory.ts`)
-- [ ] View in `renderBlockView` (`cms-react/src/blocks/BlockRenderer.tsx`)
-- [ ] Settings case in `BlockTypeSettings` (`cms-react/src/canvas/blockTypeSettings.tsx`)
-- [ ] `blockTypeSync.test.ts` green in cms-core and cms-react
-- [ ] Agent docs regenerated: `UPDATE_AGENT_DOCS=1 npm test -w @campaign/cms-agent`
-- [ ] `docs/reference/block-types.md` row updated (hand-written summary; `agent-block-schemas.md` is the generated canonical reference)
+Canonical block/tool changes must follow the producer repository's schema sync,
+auth, draft-only mutation and never-throw ToolResult rules. Do not hand-edit the
+historical generated `docs/reference/agent-block-schemas.md` in this harness.
 
-### Changing agent tools
-
-- [ ] Input schema bounded (`.max()` on strings, capped numbers) in `cms-agent/src/schemas.ts`
-- [ ] Handler returns `ToolResult` and never throws; writes go through `applyDraftMutation`
-- [ ] Unit tests cover the happy path and every reachable `ToolErrorCode`
-- [ ] Errors include a `suggestion` the model can act on
-
-### Documentation
-
-- [ ] `docs/reference/agent-block-schemas.md` — generated only, never hand-edited
-- [ ] New docs linked from `docs/README.md` or the root `README.md`
-
-## Manual QA for agent changes (examples/minimal-site)
-
-```bash
-# .dev.vars: CMS_AGENT_ENABLED=1, OPENROUTER_API_KEY=..., CMS_AGENT_MCP_SECRET=...
-npm run dev -w campaign-cms-minimal-site
-```
-
-1. `/agent` loads; with `CMS_AGENT_ENABLED` unset it 404s.
-2. Ask the agent to list pages, then add a block — reload `/` and confirm it appears in the editor draft.
-3. Ask it to publish — approval card appears; reject leaves the page unpublished, approve goes live.
-4. Ask it to update a block with a bogus field — it should receive `[VALIDATION] …`, call `get_block_types`, and recover.
-5. MCP: `tools/list` and a `tools/call` with the secret header; missing secret → 401.
+The minimal example has no admin authentication. Manual local agent QA requires
+ignored `.dev.vars`; keep the kill switch off by default and never use real provider
+calls as a test dependency. Production hosts supply their own access control and
+publication approval policy.

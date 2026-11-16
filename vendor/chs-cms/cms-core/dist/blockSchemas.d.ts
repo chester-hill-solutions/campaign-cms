@@ -7,9 +7,9 @@ export declare const blockLayoutSchema: z.ZodObject<{
         full: "full";
     }>;
     background: z.ZodEnum<{
+        accent: "accent";
         none: "none";
         card: "card";
-        accent: "accent";
         "brand-gradient": "brand-gradient";
     }>;
     spacing: z.ZodEnum<{
@@ -21,9 +21,48 @@ export declare const blockLayoutSchema: z.ZodObject<{
         left: "left";
         center: "center";
     }>;
+    accent: z.ZodOptional<z.ZodEnum<{
+        primary: "primary";
+        alt: "alt";
+        tertiary: "tertiary";
+    }>>;
 }, z.core.$strip>;
 export type BlockLayout = z.infer<typeof blockLayoutSchema>;
 export declare const DEFAULT_BLOCK_LAYOUT: BlockLayout;
+/** Constrained item-container options for multi-item blocks (grids, columns, lists). */
+export declare const containerLayoutSchema: z.ZodObject<{
+    gap: z.ZodDefault<z.ZodEnum<{
+        tight: "tight";
+        normal: "normal";
+        loose: "loose";
+    }>>;
+    arrangement: z.ZodDefault<z.ZodEnum<{
+        grid: "grid";
+        list: "list";
+    }>>;
+    alignItems: z.ZodDefault<z.ZodEnum<{
+        center: "center";
+        start: "start";
+        stretch: "stretch";
+    }>>;
+}, z.core.$strip>;
+export type ContainerLayout = z.infer<typeof containerLayoutSchema>;
+export declare const DEFAULT_CONTAINER_LAYOUT: ContainerLayout;
+/** Gap + cross-axis align only (columns and list blocks — no arrangement). */
+export declare const stackContainerLayoutSchema: z.ZodObject<{
+    gap: z.ZodDefault<z.ZodEnum<{
+        tight: "tight";
+        normal: "normal";
+        loose: "loose";
+    }>>;
+    alignItems: z.ZodDefault<z.ZodEnum<{
+        center: "center";
+        start: "start";
+        stretch: "stretch";
+    }>>;
+}, z.core.$strip>;
+export type StackContainerLayout = z.infer<typeof stackContainerLayoutSchema>;
+export declare const DEFAULT_STACK_CONTAINER_LAYOUT: StackContainerLayout;
 export declare const blockCtaSchema: z.ZodObject<{
     label: z.ZodString;
     href: z.ZodString;
@@ -39,9 +78,9 @@ export declare const heroBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -53,10 +92,16 @@ export declare const heroBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"hero">;
     kicker: z.ZodOptional<z.ZodString>;
     heading: z.ZodString;
+    headingAccent: z.ZodOptional<z.ZodString>;
     subhead: z.ZodOptional<z.ZodString>;
     body: z.ZodOptional<z.ZodString>;
     primaryCta: z.ZodOptional<z.ZodObject<{
@@ -95,9 +140,9 @@ export declare const richTextBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -109,6 +154,11 @@ export declare const richTextBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"richText">;
     markdown: z.ZodString;
@@ -131,9 +181,9 @@ export declare const cardGridBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -145,6 +195,11 @@ export declare const cardGridBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"cardGrid">;
     heading: z.ZodOptional<z.ZodString>;
@@ -158,6 +213,22 @@ export declare const cardGridBlockSchema: z.ZodObject<{
         iconSrc: z.ZodOptional<z.ZodString>;
         imageSrc: z.ZodOptional<z.ZodString>;
     }, z.core.$strip>>;
+    container: z.ZodDefault<z.ZodObject<{
+        gap: z.ZodDefault<z.ZodEnum<{
+            tight: "tight";
+            normal: "normal";
+            loose: "loose";
+        }>>;
+        arrangement: z.ZodDefault<z.ZodEnum<{
+            grid: "grid";
+            list: "list";
+        }>>;
+        alignItems: z.ZodDefault<z.ZodEnum<{
+            center: "center";
+            start: "start";
+            stretch: "stretch";
+        }>>;
+    }, z.core.$strip>>;
 }, z.core.$strip>;
 export declare const tableBlockSchema: z.ZodObject<{
     id: z.ZodString;
@@ -168,9 +239,9 @@ export declare const tableBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -182,6 +253,11 @@ export declare const tableBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"table">;
     heading: z.ZodOptional<z.ZodString>;
@@ -206,9 +282,9 @@ export declare const accordionBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -220,6 +296,11 @@ export declare const accordionBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"accordion">;
     heading: z.ZodOptional<z.ZodString>;
@@ -239,9 +320,9 @@ export declare const ctaStripBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -253,6 +334,11 @@ export declare const ctaStripBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"ctaStrip">;
     headline: z.ZodString;
@@ -277,9 +363,9 @@ export declare const quoteBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -291,6 +377,11 @@ export declare const quoteBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"quote">;
     text: z.ZodString;
@@ -305,9 +396,9 @@ export declare const imageBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -319,6 +410,11 @@ export declare const imageBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"image">;
     src: z.ZodString;
@@ -334,9 +430,9 @@ export declare const columnsBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -348,11 +444,28 @@ export declare const columnsBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"columns">;
     columnCount: z.ZodUnion<readonly [z.ZodLiteral<2>, z.ZodLiteral<3>]>;
     columns: z.ZodArray<z.ZodObject<{
         markdown: z.ZodString;
+    }, z.core.$strip>>;
+    container: z.ZodDefault<z.ZodObject<{
+        gap: z.ZodDefault<z.ZodEnum<{
+            tight: "tight";
+            normal: "normal";
+            loose: "loose";
+        }>>;
+        alignItems: z.ZodDefault<z.ZodEnum<{
+            center: "center";
+            start: "start";
+            stretch: "stretch";
+        }>>;
     }, z.core.$strip>>;
 }, z.core.$strip>;
 export declare const listBlockSchema: z.ZodObject<{
@@ -364,9 +477,9 @@ export declare const listBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -378,11 +491,28 @@ export declare const listBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"list">;
     heading: z.ZodOptional<z.ZodString>;
     ordered: z.ZodOptional<z.ZodBoolean>;
     items: z.ZodArray<z.ZodString>;
+    container: z.ZodDefault<z.ZodObject<{
+        gap: z.ZodDefault<z.ZodEnum<{
+            tight: "tight";
+            normal: "normal";
+            loose: "loose";
+        }>>;
+        alignItems: z.ZodDefault<z.ZodEnum<{
+            center: "center";
+            start: "start";
+            stretch: "stretch";
+        }>>;
+    }, z.core.$strip>>;
 }, z.core.$strip>;
 export declare const dividerBlockSchema: z.ZodObject<{
     id: z.ZodString;
@@ -393,9 +523,9 @@ export declare const dividerBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -407,6 +537,11 @@ export declare const dividerBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"divider">;
 }, z.core.$strip>;
@@ -419,9 +554,9 @@ export declare const sectionHeaderBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -433,6 +568,11 @@ export declare const sectionHeaderBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"sectionHeader">;
     anchorId: z.ZodOptional<z.ZodString>;
@@ -454,9 +594,9 @@ export declare const twoUpBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -468,6 +608,11 @@ export declare const twoUpBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"twoUp">;
     kicker: z.ZodOptional<z.ZodString>;
@@ -507,9 +652,9 @@ export declare const statGridBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -521,6 +666,11 @@ export declare const statGridBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"statGrid">;
     heading: z.ZodOptional<z.ZodString>;
@@ -532,6 +682,22 @@ export declare const statGridBlockSchema: z.ZodObject<{
         label: z.ZodString;
         note: z.ZodOptional<z.ZodString>;
         source: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+    container: z.ZodDefault<z.ZodObject<{
+        gap: z.ZodDefault<z.ZodEnum<{
+            tight: "tight";
+            normal: "normal";
+            loose: "loose";
+        }>>;
+        arrangement: z.ZodDefault<z.ZodEnum<{
+            grid: "grid";
+            list: "list";
+        }>>;
+        alignItems: z.ZodDefault<z.ZodEnum<{
+            center: "center";
+            start: "start";
+            stretch: "stretch";
+        }>>;
     }, z.core.$strip>>;
 }, z.core.$strip>;
 export declare const timelineItemSchema: z.ZodObject<{
@@ -550,9 +716,9 @@ export declare const timelineBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -564,6 +730,11 @@ export declare const timelineBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"timeline">;
     heading: z.ZodOptional<z.ZodString>;
@@ -584,9 +755,9 @@ export declare const calloutBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -598,6 +769,11 @@ export declare const calloutBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"callout">;
     tone: z.ZodDefault<z.ZodEnum<{
@@ -618,9 +794,9 @@ export declare const embedBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -632,6 +808,11 @@ export declare const embedBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"embed">;
     title: z.ZodString;
@@ -645,6 +826,54 @@ export declare const embedBlockSchema: z.ZodObject<{
     }>>;
     caption: z.ZodOptional<z.ZodString>;
 }, z.core.$strip>;
+/**
+ * The longest custom HTML this repository will store, and the longest `sanitizeCustomHtml`
+ * will return. Matches `customHtmlBlockSchema`'s own bound, so a value that passed the schema
+ * cannot still be refused by the filter for length.
+ */
+export declare const CUSTOM_HTML_MAX_LENGTH = 50000;
+/**
+ * Tags `customHtml` may contain.
+ *
+ * Declared here rather than beside the filter, because the block schema is what says what a
+ * custom HTML block is allowed to be. A sanitizer with its own private list is a list that
+ * nobody reads when a block changes.
+ *
+ * `svg` and `math` are absent on purpose. Foreign-content parsing is where mutation XSS lives:
+ * a subtree that re-parses differently in the browser than in the filter is the whole attack,
+ * and the cheapest refusal is to not accept the namespace.
+ */
+export declare const CUSTOM_HTML_ALLOWED_TAGS: ReadonlySet<string>;
+/**
+ * Attributes `customHtml` may carry, for any allowed tag.
+ *
+ * An allowlist rather than a denylist, so `onerror`, `style`, `srcdoc`, `formaction`, `ping`
+ * and `data` are refused by absence instead of by being remembered. `class` and `id` are here
+ * because the CMS's own stylesheets target them.
+ */
+export declare const CUSTOM_HTML_ALLOWED_ATTRIBUTES: ReadonlySet<string>;
+/**
+ * Attributes whose value is a URL, so their value gets a scheme check.
+ *
+ * Only names in `CUSTOM_HTML_ALLOWED_ATTRIBUTES` reach the check, so this list is a
+ * completeness note rather than a second gate.
+ */
+export declare const CUSTOM_HTML_URL_ATTRIBUTES: ReadonlySet<string>;
+/**
+ * URL schemes `customHtml` may use.
+ *
+ * Everything else is refused, including `javascript:` and `vbscript:`. A scheme absent from
+ * this set cannot reach the output whatever the tag.
+ */
+export declare const CUSTOM_HTML_ALLOWED_URL_SCHEMES: ReadonlySet<string>;
+/**
+ * Elements whose content is dropped along with the element.
+ *
+ * Keeping the text of a `script` or `style` is how a filter ends up emitting its payload as
+ * visible text, and keeping the children of `svg` or `object` is how a filter ends up
+ * reconstructing a subtree it never checked.
+ */
+export declare const CUSTOM_HTML_DROP_WITH_CONTENT: ReadonlySet<string>;
 export declare const customHtmlBlockSchema: z.ZodObject<{
     id: z.ZodString;
     layout: z.ZodDefault<z.ZodObject<{
@@ -654,9 +883,9 @@ export declare const customHtmlBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -668,6 +897,11 @@ export declare const customHtmlBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"customHtml">;
     label: z.ZodOptional<z.ZodString>;
@@ -683,9 +917,9 @@ export declare const spacerBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -697,6 +931,11 @@ export declare const spacerBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"spacer">;
     size: z.ZodDefault<z.ZodEnum<{
@@ -714,9 +953,9 @@ export declare const contactFormBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -728,11 +967,17 @@ export declare const contactFormBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"contactForm">;
     kicker: z.ZodOptional<z.ZodString>;
     heading: z.ZodString;
     subtext: z.ZodOptional<z.ZodString>;
+    formId: z.ZodOptional<z.ZodString>;
 }, z.core.$strip>;
 export declare const eventsListBlockSchema: z.ZodObject<{
     id: z.ZodString;
@@ -743,9 +988,9 @@ export declare const eventsListBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -757,6 +1002,11 @@ export declare const eventsListBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"eventsList">;
     heading: z.ZodOptional<z.ZodString>;
@@ -770,9 +1020,9 @@ export declare const eventsTeaserBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -784,6 +1034,11 @@ export declare const eventsTeaserBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"eventsTeaser">;
     heading: z.ZodOptional<z.ZodString>;
@@ -799,9 +1054,9 @@ export declare const bioLinksBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -813,6 +1068,11 @@ export declare const bioLinksBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"bioLinks">;
 }, z.core.$strip>;
@@ -825,9 +1085,9 @@ export declare const donateEmbedBlockSchema: z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -839,9 +1099,72 @@ export declare const donateEmbedBlockSchema: z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"donateEmbed">;
     heading: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+export declare const collectionGridBlockSchema: z.ZodObject<{
+    id: z.ZodString;
+    layout: z.ZodDefault<z.ZodObject<{
+        width: z.ZodEnum<{
+            contained: "contained";
+            wide: "wide";
+            full: "full";
+        }>;
+        background: z.ZodEnum<{
+            accent: "accent";
+            none: "none";
+            card: "card";
+            "brand-gradient": "brand-gradient";
+        }>;
+        spacing: z.ZodEnum<{
+            tight: "tight";
+            normal: "normal";
+            loose: "loose";
+        }>;
+        align: z.ZodEnum<{
+            left: "left";
+            center: "center";
+        }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
+    }, z.core.$strip>>;
+    type: z.ZodLiteral<"collectionGrid">;
+    collectionId: z.ZodString;
+    heading: z.ZodOptional<z.ZodString>;
+    subheading: z.ZodOptional<z.ZodString>;
+    columns: z.ZodDefault<z.ZodUnion<readonly [z.ZodLiteral<1>, z.ZodLiteral<2>, z.ZodLiteral<3>, z.ZodLiteral<4>]>>;
+    categoryId: z.ZodOptional<z.ZodString>;
+    showFeaturedOnly: z.ZodDefault<z.ZodBoolean>;
+    maxItems: z.ZodOptional<z.ZodNumber>;
+    container: z.ZodDefault<z.ZodObject<{
+        gap: z.ZodDefault<z.ZodEnum<{
+            tight: "tight";
+            normal: "normal";
+            loose: "loose";
+        }>>;
+        arrangement: z.ZodDefault<z.ZodEnum<{
+            grid: "grid";
+            list: "list";
+        }>>;
+        alignItems: z.ZodDefault<z.ZodEnum<{
+            center: "center";
+            start: "start";
+            stretch: "stretch";
+        }>>;
+    }, z.core.$strip>>;
+    cardStyle: z.ZodEnum<{
+        summary: "summary";
+        overlay: "overlay";
+    }>;
 }, z.core.$strip>;
 export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
     id: z.ZodString;
@@ -852,9 +1175,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -866,10 +1189,16 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"hero">;
     kicker: z.ZodOptional<z.ZodString>;
     heading: z.ZodString;
+    headingAccent: z.ZodOptional<z.ZodString>;
     subhead: z.ZodOptional<z.ZodString>;
     body: z.ZodOptional<z.ZodString>;
     primaryCta: z.ZodOptional<z.ZodObject<{
@@ -907,9 +1236,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -921,6 +1250,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"richText">;
     markdown: z.ZodString;
@@ -934,9 +1268,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -948,6 +1282,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"cardGrid">;
     heading: z.ZodOptional<z.ZodString>;
@@ -961,6 +1300,22 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
         iconSrc: z.ZodOptional<z.ZodString>;
         imageSrc: z.ZodOptional<z.ZodString>;
     }, z.core.$strip>>;
+    container: z.ZodDefault<z.ZodObject<{
+        gap: z.ZodDefault<z.ZodEnum<{
+            tight: "tight";
+            normal: "normal";
+            loose: "loose";
+        }>>;
+        arrangement: z.ZodDefault<z.ZodEnum<{
+            grid: "grid";
+            list: "list";
+        }>>;
+        alignItems: z.ZodDefault<z.ZodEnum<{
+            center: "center";
+            start: "start";
+            stretch: "stretch";
+        }>>;
+    }, z.core.$strip>>;
 }, z.core.$strip>, z.ZodObject<{
     id: z.ZodString;
     layout: z.ZodDefault<z.ZodObject<{
@@ -970,9 +1325,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -984,6 +1339,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"table">;
     heading: z.ZodOptional<z.ZodString>;
@@ -1001,9 +1361,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1015,6 +1375,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"accordion">;
     heading: z.ZodOptional<z.ZodString>;
@@ -1033,9 +1398,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1047,6 +1412,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"ctaStrip">;
     headline: z.ZodString;
@@ -1070,9 +1440,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1084,6 +1454,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"quote">;
     text: z.ZodString;
@@ -1097,9 +1472,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1111,6 +1486,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"image">;
     src: z.ZodString;
@@ -1125,9 +1505,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1139,12 +1519,29 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"columns">;
     columnCount: z.ZodUnion<readonly [z.ZodLiteral<2>, z.ZodLiteral<3>]>;
     columns: z.ZodArray<z.ZodObject<{
         markdown: z.ZodString;
     }, z.core.$strip>>;
+    container: z.ZodDefault<z.ZodObject<{
+        gap: z.ZodDefault<z.ZodEnum<{
+            tight: "tight";
+            normal: "normal";
+            loose: "loose";
+        }>>;
+        alignItems: z.ZodDefault<z.ZodEnum<{
+            center: "center";
+            start: "start";
+            stretch: "stretch";
+        }>>;
+    }, z.core.$strip>>;
 }, z.core.$strip>, z.ZodObject<{
     id: z.ZodString;
     layout: z.ZodDefault<z.ZodObject<{
@@ -1154,9 +1551,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1168,11 +1565,28 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"list">;
     heading: z.ZodOptional<z.ZodString>;
     ordered: z.ZodOptional<z.ZodBoolean>;
     items: z.ZodArray<z.ZodString>;
+    container: z.ZodDefault<z.ZodObject<{
+        gap: z.ZodDefault<z.ZodEnum<{
+            tight: "tight";
+            normal: "normal";
+            loose: "loose";
+        }>>;
+        alignItems: z.ZodDefault<z.ZodEnum<{
+            center: "center";
+            start: "start";
+            stretch: "stretch";
+        }>>;
+    }, z.core.$strip>>;
 }, z.core.$strip>, z.ZodObject<{
     id: z.ZodString;
     layout: z.ZodDefault<z.ZodObject<{
@@ -1182,9 +1596,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1196,6 +1610,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"divider">;
 }, z.core.$strip>, z.ZodObject<{
@@ -1207,9 +1626,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1221,6 +1640,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"sectionHeader">;
     anchorId: z.ZodOptional<z.ZodString>;
@@ -1241,9 +1665,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1255,6 +1679,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"twoUp">;
     kicker: z.ZodOptional<z.ZodString>;
@@ -1286,9 +1715,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1300,6 +1729,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"statGrid">;
     heading: z.ZodOptional<z.ZodString>;
@@ -1312,6 +1746,22 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
         note: z.ZodOptional<z.ZodString>;
         source: z.ZodOptional<z.ZodString>;
     }, z.core.$strip>>;
+    container: z.ZodDefault<z.ZodObject<{
+        gap: z.ZodDefault<z.ZodEnum<{
+            tight: "tight";
+            normal: "normal";
+            loose: "loose";
+        }>>;
+        arrangement: z.ZodDefault<z.ZodEnum<{
+            grid: "grid";
+            list: "list";
+        }>>;
+        alignItems: z.ZodDefault<z.ZodEnum<{
+            center: "center";
+            start: "start";
+            stretch: "stretch";
+        }>>;
+    }, z.core.$strip>>;
 }, z.core.$strip>, z.ZodObject<{
     id: z.ZodString;
     layout: z.ZodDefault<z.ZodObject<{
@@ -1321,9 +1771,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1335,6 +1785,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"timeline">;
     heading: z.ZodOptional<z.ZodString>;
@@ -1354,9 +1809,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1368,6 +1823,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"callout">;
     tone: z.ZodDefault<z.ZodEnum<{
@@ -1387,9 +1847,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1401,6 +1861,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"embed">;
     title: z.ZodString;
@@ -1422,9 +1887,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1436,6 +1901,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"customHtml">;
     label: z.ZodOptional<z.ZodString>;
@@ -1450,9 +1920,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1464,6 +1934,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"spacer">;
     size: z.ZodDefault<z.ZodEnum<{
@@ -1480,9 +1955,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1494,11 +1969,17 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"contactForm">;
     kicker: z.ZodOptional<z.ZodString>;
     heading: z.ZodString;
     subtext: z.ZodOptional<z.ZodString>;
+    formId: z.ZodOptional<z.ZodString>;
 }, z.core.$strip>, z.ZodObject<{
     id: z.ZodString;
     layout: z.ZodDefault<z.ZodObject<{
@@ -1508,9 +1989,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1522,6 +2003,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"eventsList">;
     heading: z.ZodOptional<z.ZodString>;
@@ -1534,9 +2020,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1548,6 +2034,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"eventsTeaser">;
     heading: z.ZodOptional<z.ZodString>;
@@ -1562,9 +2053,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1576,6 +2067,11 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"bioLinks">;
 }, z.core.$strip>, z.ZodObject<{
@@ -1587,9 +2083,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             full: "full";
         }>;
         background: z.ZodEnum<{
+            accent: "accent";
             none: "none";
             card: "card";
-            accent: "accent";
             "brand-gradient": "brand-gradient";
         }>;
         spacing: z.ZodEnum<{
@@ -1601,9 +2097,71 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<[z.ZodObject<{
             left: "left";
             center: "center";
         }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
     }, z.core.$strip>>;
     type: z.ZodLiteral<"donateEmbed">;
     heading: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>, z.ZodObject<{
+    id: z.ZodString;
+    layout: z.ZodDefault<z.ZodObject<{
+        width: z.ZodEnum<{
+            contained: "contained";
+            wide: "wide";
+            full: "full";
+        }>;
+        background: z.ZodEnum<{
+            accent: "accent";
+            none: "none";
+            card: "card";
+            "brand-gradient": "brand-gradient";
+        }>;
+        spacing: z.ZodEnum<{
+            tight: "tight";
+            normal: "normal";
+            loose: "loose";
+        }>;
+        align: z.ZodEnum<{
+            left: "left";
+            center: "center";
+        }>;
+        accent: z.ZodOptional<z.ZodEnum<{
+            primary: "primary";
+            alt: "alt";
+            tertiary: "tertiary";
+        }>>;
+    }, z.core.$strip>>;
+    type: z.ZodLiteral<"collectionGrid">;
+    collectionId: z.ZodString;
+    heading: z.ZodOptional<z.ZodString>;
+    subheading: z.ZodOptional<z.ZodString>;
+    columns: z.ZodDefault<z.ZodUnion<readonly [z.ZodLiteral<1>, z.ZodLiteral<2>, z.ZodLiteral<3>, z.ZodLiteral<4>]>>;
+    categoryId: z.ZodOptional<z.ZodString>;
+    showFeaturedOnly: z.ZodDefault<z.ZodBoolean>;
+    maxItems: z.ZodOptional<z.ZodNumber>;
+    container: z.ZodDefault<z.ZodObject<{
+        gap: z.ZodDefault<z.ZodEnum<{
+            tight: "tight";
+            normal: "normal";
+            loose: "loose";
+        }>>;
+        arrangement: z.ZodDefault<z.ZodEnum<{
+            grid: "grid";
+            list: "list";
+        }>>;
+        alignItems: z.ZodDefault<z.ZodEnum<{
+            center: "center";
+            start: "start";
+            stretch: "stretch";
+        }>>;
+    }, z.core.$strip>>;
+    cardStyle: z.ZodEnum<{
+        summary: "summary";
+        overlay: "overlay";
+    }>;
 }, z.core.$strip>], "type">;
 export type PageBlock = z.infer<typeof pageBlockSchema>;
 export type HeroBlock = z.infer<typeof heroBlockSchema>;
@@ -1630,6 +2188,7 @@ export type EventsListBlock = z.infer<typeof eventsListBlockSchema>;
 export type EventsTeaserBlock = z.infer<typeof eventsTeaserBlockSchema>;
 export type BioLinksBlock = z.infer<typeof bioLinksBlockSchema>;
 export type DonateEmbedBlock = z.infer<typeof donateEmbedBlockSchema>;
+export type CollectionGridBlock = z.infer<typeof collectionGridBlockSchema>;
 export declare const pageDocPayloadSchema: z.ZodObject<{
     kind: z.ZodLiteral<"pageDoc">;
     version: z.ZodLiteral<1>;
@@ -1653,9 +2212,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -1667,10 +2226,16 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"hero">;
         kicker: z.ZodOptional<z.ZodString>;
         heading: z.ZodString;
+        headingAccent: z.ZodOptional<z.ZodString>;
         subhead: z.ZodOptional<z.ZodString>;
         body: z.ZodOptional<z.ZodString>;
         primaryCta: z.ZodOptional<z.ZodObject<{
@@ -1708,9 +2273,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -1722,6 +2287,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"richText">;
         markdown: z.ZodString;
@@ -1735,9 +2305,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -1749,6 +2319,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"cardGrid">;
         heading: z.ZodOptional<z.ZodString>;
@@ -1762,6 +2337,22 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
             iconSrc: z.ZodOptional<z.ZodString>;
             imageSrc: z.ZodOptional<z.ZodString>;
         }, z.core.$strip>>;
+        container: z.ZodDefault<z.ZodObject<{
+            gap: z.ZodDefault<z.ZodEnum<{
+                tight: "tight";
+                normal: "normal";
+                loose: "loose";
+            }>>;
+            arrangement: z.ZodDefault<z.ZodEnum<{
+                grid: "grid";
+                list: "list";
+            }>>;
+            alignItems: z.ZodDefault<z.ZodEnum<{
+                center: "center";
+                start: "start";
+                stretch: "stretch";
+            }>>;
+        }, z.core.$strip>>;
     }, z.core.$strip>, z.ZodObject<{
         id: z.ZodString;
         layout: z.ZodDefault<z.ZodObject<{
@@ -1771,9 +2362,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -1785,6 +2376,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"table">;
         heading: z.ZodOptional<z.ZodString>;
@@ -1802,9 +2398,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -1816,6 +2412,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"accordion">;
         heading: z.ZodOptional<z.ZodString>;
@@ -1834,9 +2435,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -1848,6 +2449,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"ctaStrip">;
         headline: z.ZodString;
@@ -1871,9 +2477,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -1885,6 +2491,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"quote">;
         text: z.ZodString;
@@ -1898,9 +2509,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -1912,6 +2523,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"image">;
         src: z.ZodString;
@@ -1926,9 +2542,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -1940,12 +2556,29 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"columns">;
         columnCount: z.ZodUnion<readonly [z.ZodLiteral<2>, z.ZodLiteral<3>]>;
         columns: z.ZodArray<z.ZodObject<{
             markdown: z.ZodString;
         }, z.core.$strip>>;
+        container: z.ZodDefault<z.ZodObject<{
+            gap: z.ZodDefault<z.ZodEnum<{
+                tight: "tight";
+                normal: "normal";
+                loose: "loose";
+            }>>;
+            alignItems: z.ZodDefault<z.ZodEnum<{
+                center: "center";
+                start: "start";
+                stretch: "stretch";
+            }>>;
+        }, z.core.$strip>>;
     }, z.core.$strip>, z.ZodObject<{
         id: z.ZodString;
         layout: z.ZodDefault<z.ZodObject<{
@@ -1955,9 +2588,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -1969,11 +2602,28 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"list">;
         heading: z.ZodOptional<z.ZodString>;
         ordered: z.ZodOptional<z.ZodBoolean>;
         items: z.ZodArray<z.ZodString>;
+        container: z.ZodDefault<z.ZodObject<{
+            gap: z.ZodDefault<z.ZodEnum<{
+                tight: "tight";
+                normal: "normal";
+                loose: "loose";
+            }>>;
+            alignItems: z.ZodDefault<z.ZodEnum<{
+                center: "center";
+                start: "start";
+                stretch: "stretch";
+            }>>;
+        }, z.core.$strip>>;
     }, z.core.$strip>, z.ZodObject<{
         id: z.ZodString;
         layout: z.ZodDefault<z.ZodObject<{
@@ -1983,9 +2633,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -1997,6 +2647,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"divider">;
     }, z.core.$strip>, z.ZodObject<{
@@ -2008,9 +2663,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2022,6 +2677,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"sectionHeader">;
         anchorId: z.ZodOptional<z.ZodString>;
@@ -2042,9 +2702,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2056,6 +2716,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"twoUp">;
         kicker: z.ZodOptional<z.ZodString>;
@@ -2087,9 +2752,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2101,6 +2766,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"statGrid">;
         heading: z.ZodOptional<z.ZodString>;
@@ -2113,6 +2783,22 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
             note: z.ZodOptional<z.ZodString>;
             source: z.ZodOptional<z.ZodString>;
         }, z.core.$strip>>;
+        container: z.ZodDefault<z.ZodObject<{
+            gap: z.ZodDefault<z.ZodEnum<{
+                tight: "tight";
+                normal: "normal";
+                loose: "loose";
+            }>>;
+            arrangement: z.ZodDefault<z.ZodEnum<{
+                grid: "grid";
+                list: "list";
+            }>>;
+            alignItems: z.ZodDefault<z.ZodEnum<{
+                center: "center";
+                start: "start";
+                stretch: "stretch";
+            }>>;
+        }, z.core.$strip>>;
     }, z.core.$strip>, z.ZodObject<{
         id: z.ZodString;
         layout: z.ZodDefault<z.ZodObject<{
@@ -2122,9 +2808,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2136,6 +2822,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"timeline">;
         heading: z.ZodOptional<z.ZodString>;
@@ -2155,9 +2846,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2169,6 +2860,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"callout">;
         tone: z.ZodDefault<z.ZodEnum<{
@@ -2188,9 +2884,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2202,6 +2898,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"embed">;
         title: z.ZodString;
@@ -2223,9 +2924,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2237,6 +2938,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"customHtml">;
         label: z.ZodOptional<z.ZodString>;
@@ -2251,9 +2957,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2265,6 +2971,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"spacer">;
         size: z.ZodDefault<z.ZodEnum<{
@@ -2281,9 +2992,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2295,11 +3006,17 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"contactForm">;
         kicker: z.ZodOptional<z.ZodString>;
         heading: z.ZodString;
         subtext: z.ZodOptional<z.ZodString>;
+        formId: z.ZodOptional<z.ZodString>;
     }, z.core.$strip>, z.ZodObject<{
         id: z.ZodString;
         layout: z.ZodDefault<z.ZodObject<{
@@ -2309,9 +3026,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2323,6 +3040,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"eventsList">;
         heading: z.ZodOptional<z.ZodString>;
@@ -2335,9 +3057,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2349,6 +3071,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"eventsTeaser">;
         heading: z.ZodOptional<z.ZodString>;
@@ -2363,9 +3090,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2377,6 +3104,11 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"bioLinks">;
     }, z.core.$strip>, z.ZodObject<{
@@ -2388,9 +3120,9 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 full: "full";
             }>;
             background: z.ZodEnum<{
+                accent: "accent";
                 none: "none";
                 card: "card";
-                accent: "accent";
                 "brand-gradient": "brand-gradient";
             }>;
             spacing: z.ZodEnum<{
@@ -2402,9 +3134,71 @@ export declare const pageDocPayloadSchema: z.ZodObject<{
                 left: "left";
                 center: "center";
             }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
         }, z.core.$strip>>;
         type: z.ZodLiteral<"donateEmbed">;
         heading: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>, z.ZodObject<{
+        id: z.ZodString;
+        layout: z.ZodDefault<z.ZodObject<{
+            width: z.ZodEnum<{
+                contained: "contained";
+                wide: "wide";
+                full: "full";
+            }>;
+            background: z.ZodEnum<{
+                accent: "accent";
+                none: "none";
+                card: "card";
+                "brand-gradient": "brand-gradient";
+            }>;
+            spacing: z.ZodEnum<{
+                tight: "tight";
+                normal: "normal";
+                loose: "loose";
+            }>;
+            align: z.ZodEnum<{
+                left: "left";
+                center: "center";
+            }>;
+            accent: z.ZodOptional<z.ZodEnum<{
+                primary: "primary";
+                alt: "alt";
+                tertiary: "tertiary";
+            }>>;
+        }, z.core.$strip>>;
+        type: z.ZodLiteral<"collectionGrid">;
+        collectionId: z.ZodString;
+        heading: z.ZodOptional<z.ZodString>;
+        subheading: z.ZodOptional<z.ZodString>;
+        columns: z.ZodDefault<z.ZodUnion<readonly [z.ZodLiteral<1>, z.ZodLiteral<2>, z.ZodLiteral<3>, z.ZodLiteral<4>]>>;
+        categoryId: z.ZodOptional<z.ZodString>;
+        showFeaturedOnly: z.ZodDefault<z.ZodBoolean>;
+        maxItems: z.ZodOptional<z.ZodNumber>;
+        container: z.ZodDefault<z.ZodObject<{
+            gap: z.ZodDefault<z.ZodEnum<{
+                tight: "tight";
+                normal: "normal";
+                loose: "loose";
+            }>>;
+            arrangement: z.ZodDefault<z.ZodEnum<{
+                grid: "grid";
+                list: "list";
+            }>>;
+            alignItems: z.ZodDefault<z.ZodEnum<{
+                center: "center";
+                start: "start";
+                stretch: "stretch";
+            }>>;
+        }, z.core.$strip>>;
+        cardStyle: z.ZodEnum<{
+            summary: "summary";
+            overlay: "overlay";
+        }>;
     }, z.core.$strip>], "type">>;
 }, z.core.$strip>;
 export type PageDocPayload = z.infer<typeof pageDocPayloadSchema>;
@@ -2412,10 +3206,16 @@ export declare function createBlockId(prefix?: string): string;
 export declare const BLOCK_TYPE_LABELS: Record<PageBlock['type'], string>;
 export declare const LAYOUT_BLOCK_TYPES: readonly ["sectionHeader", "twoUp", "columns", "spacer", "divider"];
 export declare const CONTENT_BLOCK_TYPES: readonly ["hero", "richText", "cardGrid", "statGrid", "table", "accordion", "timeline", "callout", "quote", "image", "list", "ctaStrip", "embed", "customHtml"];
-export declare const APP_BLOCK_TYPES: readonly ["contactForm", "eventsList", "eventsTeaser", "bioLinks", "donateEmbed"];
+/**
+ * Blocks with behavior supplied by the consuming site. These remain part of
+ * the shared, portable block catalog; "app" describes the renderer adapter
+ * boundary, not ownership by a single product. Consumers should preserve and
+ * expose these blocks even when they do not yet provide a public renderer.
+ */
+export declare const APP_BLOCK_TYPES: readonly ["contactForm", "eventsList", "eventsTeaser", "bioLinks", "donateEmbed", "collectionGrid"];
 /**
  * Every block type in the pageBlock union, grouped order. Single source of
  * truth for registries (factory, renderer, settings, agent tools) — kept in
  * sync with the schema union by blockTypeSync.test.ts.
  */
-export declare const ALL_BLOCK_TYPES: readonly ["sectionHeader", "twoUp", "columns", "spacer", "divider", "hero", "richText", "cardGrid", "statGrid", "table", "accordion", "timeline", "callout", "quote", "image", "list", "ctaStrip", "embed", "customHtml", "contactForm", "eventsList", "eventsTeaser", "bioLinks", "donateEmbed"];
+export declare const ALL_BLOCK_TYPES: readonly ["sectionHeader", "twoUp", "columns", "spacer", "divider", "hero", "richText", "cardGrid", "statGrid", "table", "accordion", "timeline", "callout", "quote", "image", "list", "ctaStrip", "embed", "customHtml", "contactForm", "eventsList", "eventsTeaser", "bioLinks", "donateEmbed", "collectionGrid"];

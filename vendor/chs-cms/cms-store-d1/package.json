@@ -1,0 +1,38 @@
+{
+  "name": "@chester-hill-solutions/cms-store-d1",
+  "version": "0.10.0",
+  "description": "Cloudflare D1 + R2 adapter for @chester-hill-solutions/cms-store",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chester-hill-solutions/chester-hill-solutions.git",
+    "directory": "packages/cms-store-d1"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "import": "./dist/testing/index.js",
+      "default": "./dist/testing/index.js"
+    }
+  },
+  "dependencies": {
+    "@chester-hill-solutions/cms-core": "file:../cms-core",
+    "@chester-hill-solutions/cms-setup": "file:../cms-setup",
+    "@chester-hill-solutions/cms-store": "file:../cms-store"
+  },
+  "gitHead": "b0e82399081cf1b52f7d23456cdb2de637f21163"
+}

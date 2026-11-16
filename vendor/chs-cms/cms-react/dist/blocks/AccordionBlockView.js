@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useId, useState } from 'react';
 import { createBlockId } from '@chester-hill-solutions/cms-core';
-import { AddItemButton, EditableMarkdown, EditableText, ItemControls, moveItem, useBlockEdit, } from './editable';
+import { AddItemButton, CANVAS_ITEM_SELECTED_CLASS, EditableMarkdown, EditableText, isCanvasItemSelected, ItemControls, moveItem, selectCanvasItem, useBlockEdit, } from './editable';
 import { RichTextBlockView } from './RichTextBlockView';
 export function AccordionBlockView({ block }) {
     const baseId = useId();
@@ -12,7 +12,15 @@ export function AccordionBlockView({ block }) {
                     const isOpen = edit ? true : openIds.has(section.id);
                     const panelId = `${baseId}-${section.id}`;
                     if (edit) {
-                        return (_jsxs("div", { className: "group/item relative overflow-visible rounded-xl border border-border-subtle bg-surface-elevated", children: [_jsx(ItemControls, { label: "section", index: index, count: block.sections.length, onMove: (to) => edit.updateBlock({
+                        const itemSelected = isCanvasItemSelected(edit, block.id, {
+                            itemId: section.id,
+                        });
+                        return (_jsxs("div", { className: `group/item relative overflow-visible rounded-xl border border-border-subtle bg-surface-elevated ${itemSelected ? CANVAS_ITEM_SELECTED_CLASS : ''}`, onClick: (e) => selectCanvasItem(edit, {
+                                blockId: block.id,
+                                itemKind: 'accordionSection',
+                                itemId: section.id,
+                                itemIndex: index,
+                            }, e), children: [_jsx(ItemControls, { label: "section", index: index, count: block.sections.length, onMove: (to) => edit.updateBlock({
                                         ...block,
                                         sections: moveItem(block.sections, index, to),
                                     }), onRemove: () => edit.updateBlock({

@@ -18,9 +18,11 @@ type Props = {
     onViewportChange: (viewport: Viewport) => void;
     onOpenPageSettings: () => void;
     publishPending: boolean;
+    /** Block publication (for example after a revision conflict) without claiming a request is pending. */
+    publishDisabled?: boolean;
     onPublish: () => void;
     publishMessage: string | null;
 };
 /** Sticky editor header: title, save state, undo/redo, viewport, publish. */
-export declare function EditorTopBar({ title, meta, publicPath, pagesListHref, saveStatus, saveError, dirty, pageErrorCount, canUndo, canRedo, onUndo, onRedo, viewport, onViewportChange, onOpenPageSettings, publishPending, onPublish, publishMessage, }: Props): import("react").JSX.Element;
+export declare function EditorTopBar({ title, meta, publicPath, pagesListHref, saveStatus, saveError, dirty, pageErrorCount, canUndo, canRedo, onUndo, onRedo, viewport, onViewportChange, onOpenPageSettings, publishPending, publishDisabled, onPublish, publishMessage, }: Props): import("react").JSX.Element;
 export {};

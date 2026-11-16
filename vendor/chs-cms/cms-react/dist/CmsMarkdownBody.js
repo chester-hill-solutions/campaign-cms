@@ -1,7 +1,11 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+/** Shared with table-of-contents consumers so their links match rendered headings. */
+export function cmsHeadingId(text) {
+    return text.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
 export function renderCmsInline(text) {
     const nodes = [];
-    const pattern = /(\*\*[^*]+\*\*|\*[^*\n]+\*|\[[^\]]+\]\([^)]+\))/g;
+    const pattern = /(`[^`\n]+`|\*\*.+?\*\*|\*[^*\n]+\*|\[[^\]]+\]\([^)]+\))/g;
     let lastIndex = 0;
     let match;
     while ((match = pattern.exec(text)) !== null) {
@@ -9,8 +13,11 @@ export function renderCmsInline(text) {
             nodes.push(text.slice(lastIndex, match.index));
         }
         const token = match[0];
-        if (token.startsWith('**')) {
-            nodes.push(_jsx("strong", { children: token.slice(2, -2) }, `${match.index}-strong`));
+        if (token.startsWith('`')) {
+            nodes.push(_jsx("code", { children: token.slice(1, -1) }, `${match.index}-code`));
+        }
+        else if (token.startsWith('**')) {
+            nodes.push(_jsx("strong", { children: renderCmsInline(token.slice(2, -2)) }, `${match.index}-strong`));
         }
         else if (token.startsWith('*')) {
             nodes.push(_jsx("em", { children: token.slice(1, -1) }, `${match.index}-em`));
@@ -56,6 +63,17 @@ function parseMarkdownBlocks(markdown) {
             index += 1;
             continue;
         }
+        if (line.startsWith('```')) {
+            const codeLines = [];
+            index += 1;
+            while (index < lines.length && !(lines[index]?.trim().startsWith('```') ?? false)) {
+                codeLines.push(lines[index] ?? '');
+                index += 1;
+            }
+            index += 1;
+            blocks.push({ type: 'code', text: codeLines.join('\n') });
+            continue;
+        }
         if (line.startsWith('# ') && !line.startsWith('## ')) {
             index += 1;
             while (index < lines.length && lines[index]?.trim() && !lines[index]?.startsWith('## ')) {
@@ -76,7 +94,7 @@ function parseMarkdownBlocks(markdown) {
         if (isTableRow(line)) {
             const headers = parseTableRow(line);
             index += 1;
-            if (lines[index] && isTableDivider(lines[index])) {
+            if (lines[index] && isTableDivider(lines[index] ?? '')) {
                 index += 1;
             }
             const rows = [];
@@ -116,6 +134,7 @@ function parseMarkdownBlocks(markdown) {
             (lines[index]?.trim() ?? '') &&
             lines[index]?.trim() !== '---' &&
             !lines[index]?.startsWith('#') &&
+            !(lines[index]?.trim().startsWith('```') ?? false) &&
             !(lines[index]?.trim().startsWith('- ') ?? false) &&
             !isTableRow(lines[index] ?? '') &&
             !/^(\d+)\.\s+/.test(lines[index]?.trim() ?? '')) {
@@ -132,17 +151,26 @@ export function CmsMarkdownBody({ markdown }) {
             switch (block.type) {
                 case 'heading':
                     if (block.level === 2) {
-                        return (_jsx("h2", { className: "display-title mt-8 text-2xl text-ink first:mt-0", children: block.text }, blockIndex));
+                        return (_jsx("h2", { id: cmsHeadingId(block.text), className: "display-title mt-8 text-2xl text-ink first:mt-0", children: renderCmsInline(block.text) }, blockIndex));
                     }
-                    return (_jsx("h3", { className: "mt-6 text-lg font-semibold text-ink", children: block.text }, blockIndex));
+                    return (_jsx("h3", { id: cmsHeadingId(block.text), className: "mt-6 text-lg font-semibold text-ink", children: renderCmsInline(block.text) }, blockIndex));
                 case 'paragraph':
-                    if (block.text.startsWith('*') && block.text.endsWith('*')) {
-                        return (_jsx("p", { className: "text-sm italic", children: block.text.slice(1, -1) }, blockIndex));
+                    if (block.text.startsWith('*') &&
+                        !block.text.startsWith('**') &&
+                        block.text.endsWith('*') &&
+                        !block.text.endsWith('**')) {
+                        return (_jsx("p", { className: "text-sm italic", children: renderCmsInline(block.text.slice(1, -1)) }, blockIndex));
                     }
                     if (block.text.startsWith('> ')) {
-                        return (_jsx("blockquote", { className: "border-l-4 border-accent-orange pl-4 text-ink-muted", children: renderCmsInline(block.text.slice(2)) }, blockIndex));
+                        const quote = block.text
+                            .split('\n')
+                            .map((quoteLine) => quoteLine.replace(/^>\s?/, ''))
+                            .join('\n');
+                        return (_jsx("blockquote", { className: "border-l-4 border-accent-orange pl-4 text-ink-muted", children: renderCmsInline(quote) }, blockIndex));
                     }
                     return (_jsx("p", { className: "whitespace-pre-line", children: renderCmsInline(block.text) }, blockIndex));
+                case 'code':
+                    return (_jsx("pre", { className: "overflow-x-auto", children: _jsx("code", { children: block.text }) }, blockIndex));
                 case 'list':
                     if (block.ordered) {
                         return (_jsx("ol", { className: "list-decimal space-y-2 pl-6", children: block.items.map((item) => (_jsx("li", { children: renderCmsInline(item) }, item.slice(0, 24)))) }, blockIndex));

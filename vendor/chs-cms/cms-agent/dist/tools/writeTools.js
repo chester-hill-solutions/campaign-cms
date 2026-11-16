@@ -1,7 +1,7 @@
-import { notFound, toolError } from '../errors';
-import { applyDraftMutation } from '../pipeline';
-import { createPageInput, publishPageInput, restoreRevisionInput, updatePageMetaInput, uploadMediaInput, } from '../schemas';
-import { makeTool } from './makeTool';
+import { notFound, toolError } from '../errors.js';
+import { applyDraftMutation, checkExpectedRevision } from '../pipeline.js';
+import { createPageInput, publishPageInput, restoreRevisionInput, updatePageMetaInput, uploadMediaInput, } from '../schemas.js';
+import { makeTool } from './makeTool.js';
 const MAX_MEDIA_BYTES = 5 * 1024 * 1024;
 function decodeBase64(base64) {
     try {
@@ -39,7 +39,8 @@ export function createWriteTools(store, config) {
                 if (!created.ok) {
                     return toolError('VALIDATION', created.error);
                 }
-                return { ok: true, data: { entryId: created.entryId } };
+                const entry = await store.getContentEntryRow(created.entryId);
+                return { ok: true, data: { entryId: created.entryId, draftRevisionId: entry?.draft_revision_id ?? null } };
             },
         }),
         makeTool({
@@ -104,51 +105,63 @@ export function createWriteTools(store, config) {
         }),
         makeTool({
             name: 'restore_revision',
-            description: 'Copy a historical revision into the current draft (rollback). Does not publish — call publish_page afterwards to go live.',
+            description: 'Copy a historical revision into the current draft (rollback). Does not publish — call publish_page afterwards to go live. Requires human approval.',
             inputSchema: restoreRevisionInput,
             mutates: true,
+            needsApproval: true,
             config,
-            handler: async ({ entryId, revisionId }) => {
+            handler: async ({ entryId, revisionId, expectedDraftRevisionId }) => {
                 const entry = await store.getContentEntryRow(entryId);
                 if (!entry) {
                     return notFound(`Entry "${entryId}"`, 'Call list_pages for valid ids.');
                 }
-                const restored = await store.restoreRevisionAsDraft(entryId, revisionId);
+                const checked = checkExpectedRevision(entry.draft_revision_id, expectedDraftRevisionId);
+                if (!checked.ok)
+                    return checked;
+                const restored = await store.restoreRevisionAsDraft(entryId, revisionId, expectedDraftRevisionId);
                 if (!restored.ok) {
                     return restored.error.toLowerCase().includes('not found')
                         ? notFound(`Revision "${revisionId}"`, 'Call list_revisions for valid revision ids.')
                         : toolError('PRECONDITION', restored.error);
                 }
-                return { ok: true, data: { entryId, revisionId } };
+                return { ok: true, data: { entryId, revisionId, draftRevisionId: restored.revisionId } };
             },
         }),
         makeTool({
             name: 'publish_page',
-            description: 'Publish the current draft to the live site. Requires human approval. Draft edits never go live without this call.',
+            description: 'Publish the current draft to the live site. Requires human approval. Draft edits never go live without this call. Pass expectedDraftRevisionId to bind the approval to the draft that was reviewed.',
             inputSchema: publishPageInput,
             mutates: true,
             needsApproval: true,
             config,
-            handler: async ({ entryId }) => {
+            handler: async ({ entryId, expectedDraftRevisionId }) => {
                 const entry = await store.getContentEntryRow(entryId);
                 if (!entry) {
                     return notFound(`Entry "${entryId}"`, 'Call list_pages for valid ids.');
                 }
-                if (!entry.draft_revision_id) {
+                // The approver reviewed one revision. If the draft has moved since, the approval no
+                // longer refers to what would go live.
+                const checked = checkExpectedRevision(entry.draft_revision_id, expectedDraftRevisionId);
+                if (!checked.ok)
+                    return checked;
+                if (!expectedDraftRevisionId) {
                     return toolError('PRECONDITION', 'No draft to publish', {
                         suggestion: 'Save draft changes first (add_block, update_block, …).',
                     });
                 }
                 if (entry.draft_revision_id === entry.published_revision_id) {
-                    return { ok: true, data: { entryId, alreadyPublished: true } };
+                    return { ok: true, data: { entryId, draftRevisionId: expectedDraftRevisionId, alreadyPublished: true } };
                 }
-                const result = await store.publishEntry(entryId);
+                // The revision goes down to the store, so the write is conditional on it. A check
+                // here alone would still leave a window between this read and the publish, and a
+                // concurrent session could take it.
+                const result = await store.publishEntry(entryId, expectedDraftRevisionId);
                 if (!result.published) {
-                    return toolError('PRECONDITION', 'Publish had no effect', {
+                    return toolError('CONFLICT', 'Draft changed while publishing', {
                         retryable: true,
                     });
                 }
-                return { ok: true, data: { entryId, published: true } };
+                return { ok: true, data: { entryId, draftRevisionId: expectedDraftRevisionId, published: true } };
             },
         }),
     ];

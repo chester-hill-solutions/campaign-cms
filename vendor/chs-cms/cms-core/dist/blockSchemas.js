@@ -1,16 +1,39 @@
 import { z } from 'zod';
+import { blockAccentSchema } from './theme.js';
 /** Constrained on-brand layout options shared by every block. */
 export const blockLayoutSchema = z.object({
     width: z.enum(['contained', 'wide', 'full']),
     background: z.enum(['none', 'card', 'accent', 'brand-gradient']),
     spacing: z.enum(['tight', 'normal', 'loose']),
     align: z.enum(['left', 'center']),
+    /** Which brand accent to use when background is accent | brand-gradient. */
+    accent: blockAccentSchema.optional(),
 });
 export const DEFAULT_BLOCK_LAYOUT = {
     width: 'contained',
     background: 'none',
     spacing: 'normal',
     align: 'left',
+};
+/** Constrained item-container options for multi-item blocks (grids, columns, lists). */
+export const containerLayoutSchema = z.object({
+    gap: z.enum(['tight', 'normal', 'loose']).default('normal'),
+    arrangement: z.enum(['grid', 'list']).default('grid'),
+    alignItems: z.enum(['start', 'center', 'stretch']).default('stretch'),
+});
+export const DEFAULT_CONTAINER_LAYOUT = {
+    gap: 'normal',
+    arrangement: 'grid',
+    alignItems: 'stretch',
+};
+/** Gap + cross-axis align only (columns and list blocks — no arrangement). */
+export const stackContainerLayoutSchema = z.object({
+    gap: z.enum(['tight', 'normal', 'loose']).default('normal'),
+    alignItems: z.enum(['start', 'center', 'stretch']).default('stretch'),
+});
+export const DEFAULT_STACK_CONTAINER_LAYOUT = {
+    gap: 'normal',
+    alignItems: 'stretch',
 };
 export const blockCtaSchema = z.object({
     label: z.string().min(1).max(120),
@@ -25,6 +48,7 @@ export const heroBlockSchema = blockBaseSchema.extend({
     type: z.literal('hero'),
     kicker: z.string().max(80).optional(),
     heading: z.string().min(1).max(200),
+    headingAccent: z.string().max(100).optional(),
     subhead: z.string().max(500).optional(),
     body: z.string().max(2000).optional(),
     primaryCta: blockCtaSchema.optional(),
@@ -55,6 +79,7 @@ export const cardGridBlockSchema = blockBaseSchema.extend({
     subheading: z.string().max(500).optional(),
     columns: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]),
     cards: z.array(cardGridItemSchema).min(1).max(20),
+    container: containerLayoutSchema.default(DEFAULT_CONTAINER_LAYOUT),
 });
 export const tableBlockSchema = blockBaseSchema.extend({
     type: z.literal('table'),
@@ -98,12 +123,14 @@ export const columnsBlockSchema = blockBaseSchema.extend({
     type: z.literal('columns'),
     columnCount: z.union([z.literal(2), z.literal(3)]),
     columns: z.array(z.object({ markdown: z.string().min(1).max(10000) })).min(2).max(3),
+    container: stackContainerLayoutSchema.default(DEFAULT_STACK_CONTAINER_LAYOUT),
 });
 export const listBlockSchema = blockBaseSchema.extend({
     type: z.literal('list'),
     heading: z.string().max(200).optional(),
     ordered: z.boolean().optional(),
     items: z.array(z.string().min(1).max(1000)).min(1).max(50),
+    container: stackContainerLayoutSchema.default(DEFAULT_STACK_CONTAINER_LAYOUT),
 });
 export const dividerBlockSchema = blockBaseSchema.extend({
     type: z.literal('divider'),
@@ -142,6 +169,7 @@ export const statGridBlockSchema = blockBaseSchema.extend({
     subheading: z.string().max(500).optional(),
     columns: z.union([z.literal(2), z.literal(3), z.literal(4)]),
     stats: z.array(statGridItemSchema).min(1).max(12),
+    container: containerLayoutSchema.default(DEFAULT_CONTAINER_LAYOUT),
 });
 export const timelineItemSchema = z.object({
     id: z.string().min(1).max(64),
@@ -169,10 +197,101 @@ export const embedBlockSchema = blockBaseSchema.extend({
     aspectRatio: z.enum(['16:9', '4:3', '1:1', 'auto']).default('16:9'),
     caption: z.string().max(500).optional(),
 });
+/**
+ * The longest custom HTML this repository will store, and the longest `sanitizeCustomHtml`
+ * will return. Matches `customHtmlBlockSchema`'s own bound, so a value that passed the schema
+ * cannot still be refused by the filter for length.
+ */
+export const CUSTOM_HTML_MAX_LENGTH = 50000;
+/**
+ * Tags `customHtml` may contain.
+ *
+ * Declared here rather than beside the filter, because the block schema is what says what a
+ * custom HTML block is allowed to be. A sanitizer with its own private list is a list that
+ * nobody reads when a block changes.
+ *
+ * `svg` and `math` are absent on purpose. Foreign-content parsing is where mutation XSS lives:
+ * a subtree that re-parses differently in the browser than in the filter is the whole attack,
+ * and the cheapest refusal is to not accept the namespace.
+ */
+export const CUSTOM_HTML_ALLOWED_TAGS = new Set([
+    // Sections and grouping.
+    'div', 'section', 'article', 'aside', 'header', 'footer', 'main', 'nav', 'figure', 'figcaption',
+    // Flow content.
+    'p', 'hr', 'pre', 'blockquote', 'ol', 'ul', 'li', 'dl', 'dt', 'dd',
+    // Headings.
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    // Inline text.
+    'a', 'em', 'strong', 'b', 'i', 'u', 's', 'small', 'mark', 'sub', 'sup', 'abbr', 'cite', 'q',
+    'time', 'code', 'kbd', 'samp', 'var', 'ins', 'del', 'br', 'wbr', 'span',
+    // Tables.
+    'table', 'caption', 'colgroup', 'col', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
+    // Media.
+    'img', 'picture', 'source', 'video', 'audio',
+    // Disclosure.
+    'details', 'summary',
+]);
+/**
+ * Attributes `customHtml` may carry, for any allowed tag.
+ *
+ * An allowlist rather than a denylist, so `onerror`, `style`, `srcdoc`, `formaction`, `ping`
+ * and `data` are refused by absence instead of by being remembered. `class` and `id` are here
+ * because the CMS's own stylesheets target them.
+ */
+export const CUSTOM_HTML_ALLOWED_ATTRIBUTES = new Set([
+    // Global.
+    'id', 'class', 'title', 'lang', 'dir', 'translate', 'hidden', 'role',
+    // Accessibility, which carry no behaviour of their own.
+    'alt',
+    // Links.
+    'href', 'target', 'rel', 'download', 'hreflang',
+    // Media.
+    'src', 'srcset', 'sizes', 'width', 'height', 'loading', 'decoding', 'poster', 'preload',
+    'controls', 'loop', 'muted', 'playsinline', 'autoplay',
+    // Tables.
+    'colspan', 'rowspan', 'scope', 'headers', 'abbr',
+    // Ordered lists.
+    'start', 'reversed', 'value', 'type',
+    // Quotes and time.
+    'cite', 'datetime',
+    // Disclosure.
+    'open',
+]);
+/**
+ * Attributes whose value is a URL, so their value gets a scheme check.
+ *
+ * Only names in `CUSTOM_HTML_ALLOWED_ATTRIBUTES` reach the check, so this list is a
+ * completeness note rather than a second gate.
+ */
+export const CUSTOM_HTML_URL_ATTRIBUTES = new Set([
+    'href', 'src', 'srcset', 'poster', 'cite',
+]);
+/**
+ * URL schemes `customHtml` may use.
+ *
+ * Everything else is refused, including `javascript:` and `vbscript:`. A scheme absent from
+ * this set cannot reach the output whatever the tag.
+ */
+export const CUSTOM_HTML_ALLOWED_URL_SCHEMES = new Set([
+    'http', 'https', 'mailto', 'tel',
+]);
+/**
+ * Elements whose content is dropped along with the element.
+ *
+ * Keeping the text of a `script` or `style` is how a filter ends up emitting its payload as
+ * visible text, and keeping the children of `svg` or `object` is how a filter ends up
+ * reconstructing a subtree it never checked.
+ */
+export const CUSTOM_HTML_DROP_WITH_CONTENT = new Set([
+    'script', 'style', 'template', 'svg', 'math', 'iframe', 'object', 'embed', 'applet', 'frame',
+    'frameset', 'noscript', 'noembed', 'noframes', 'xmp', 'plaintext', 'listing', 'title',
+    'textarea', 'head', 'base', 'link', 'meta',
+]);
 export const customHtmlBlockSchema = blockBaseSchema.extend({
     type: z.literal('customHtml'),
     label: z.string().max(120).optional(),
-    html: z.string().min(1).max(50000),
+    /** Bounded by `CUSTOM_HTML_MAX_LENGTH`, and filtered by `sanitizeCustomHtml` on render. */
+    html: z.string().min(1).max(CUSTOM_HTML_MAX_LENGTH),
     notes: z.string().max(1000).optional(),
 });
 export const spacerBlockSchema = blockBaseSchema.extend({
@@ -184,6 +303,7 @@ export const contactFormBlockSchema = blockBaseSchema.extend({
     kicker: z.string().max(80).optional(),
     heading: z.string().min(1).max(200),
     subtext: z.string().max(1000).optional(),
+    formId: z.string().max(80).optional(),
 });
 export const eventsListBlockSchema = blockBaseSchema.extend({
     type: z.literal('eventsList'),
@@ -201,6 +321,23 @@ export const bioLinksBlockSchema = blockBaseSchema.extend({
 export const donateEmbedBlockSchema = blockBaseSchema.extend({
     type: z.literal('donateEmbed'),
     heading: z.string().max(200).optional(),
+});
+export const collectionGridBlockSchema = blockBaseSchema.extend({
+    type: z.literal('collectionGrid'),
+    collectionId: z.string().min(1).max(80),
+    heading: z.string().max(200).optional(),
+    subheading: z.string().max(500).optional(),
+    columns: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]).default(3),
+    categoryId: z.string().max(80).optional(),
+    showFeaturedOnly: z.boolean().default(false),
+    maxItems: z.number().int().min(1).max(50).optional(),
+    container: containerLayoutSchema.default(DEFAULT_CONTAINER_LAYOUT),
+    /**
+     * Card presentation for app-level renderers:
+     * `summary` = text-detail card (title, meta, excerpt link),
+     * `overlay` = image-led card with the title over full-bleed art.
+     */
+    cardStyle: z.enum(['summary', 'overlay']),
 });
 export const pageBlockSchema = z.discriminatedUnion('type', [
     heroBlockSchema,
@@ -227,6 +364,7 @@ export const pageBlockSchema = z.discriminatedUnion('type', [
     eventsTeaserBlockSchema,
     bioLinksBlockSchema,
     donateEmbedBlockSchema,
+    collectionGridBlockSchema,
 ]);
 export const pageDocPayloadSchema = z.object({
     kind: z.literal('pageDoc'),
@@ -272,6 +410,7 @@ export const BLOCK_TYPE_LABELS = {
     eventsTeaser: 'Events teaser',
     bioLinks: 'Bio links',
     donateEmbed: 'Donate embed',
+    collectionGrid: 'Collection grid',
 };
 export const LAYOUT_BLOCK_TYPES = [
     'sectionHeader',
@@ -296,12 +435,19 @@ export const CONTENT_BLOCK_TYPES = [
     'embed',
     'customHtml',
 ];
+/**
+ * Blocks with behavior supplied by the consuming site. These remain part of
+ * the shared, portable block catalog; "app" describes the renderer adapter
+ * boundary, not ownership by a single product. Consumers should preserve and
+ * expose these blocks even when they do not yet provide a public renderer.
+ */
 export const APP_BLOCK_TYPES = [
     'contactForm',
     'eventsList',
     'eventsTeaser',
     'bioLinks',
     'donateEmbed',
+    'collectionGrid',
 ];
 /**
  * Every block type in the pageBlock union, grouped order. Single source of

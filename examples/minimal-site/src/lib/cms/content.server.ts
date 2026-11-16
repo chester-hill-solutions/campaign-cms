@@ -1,7 +1,7 @@
 import { env } from 'cloudflare:workers'
 
 import { pageDocPayloadSchema } from '@chester-hill-solutions/cms-core'
-import { createCmsStore } from '@chester-hill-solutions/cms-server'
+import { createCmsStoreD1 } from '@chester-hill-solutions/cms-store-d1'
 
 import { defaultNewPageDoc, entryIdFromPageSlug, validateNewPageSlug } from './pageDocEntry'
 
@@ -10,7 +10,7 @@ function parsePayload(raw: unknown) {
   return parsed.success ? parsed.data : null
 }
 
-const store = createCmsStore(() => ({ db: env.DB, media: env.MEDIA }), {
+const store = createCmsStoreD1(() => ({ db: env.DB, media: env.MEDIA }), {
   parsePayload,
   newPageDoc: defaultNewPageDoc,
   validateNewPageSlug,

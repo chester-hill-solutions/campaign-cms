@@ -1,6 +1,6 @@
 import type { z } from 'zod';
-import type { CmsAgentTools } from './tools';
-import type { ToolError } from './types';
+import type { CmsAgentTools } from './tools/index.js';
+import type { ToolError } from './types.js';
 /**
  * Framework-agnostic tool spec consumed by the host's TanStack AI wiring
  * (or any LLM tool-calling runtime). Deliberately has no dependency on

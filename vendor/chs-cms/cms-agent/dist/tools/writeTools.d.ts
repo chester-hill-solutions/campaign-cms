@@ -1,3 +1,3 @@
-import type { CmsAgentConfig, CmsAgentStore } from '../types';
-import { type CmsAgentTool } from './makeTool';
+import type { CmsAgentConfig, CmsAgentStore } from '../types.js';
+import { type CmsAgentTool } from './makeTool.js';
 export declare function createWriteTools(store: CmsAgentStore, config: CmsAgentConfig): CmsAgentTool[];

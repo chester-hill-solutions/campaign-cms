@@ -7,7 +7,7 @@ import {
 } from '@chester-hill-solutions/cms-agent'
 import { createCmsToolSpecs } from '@chester-hill-solutions/cms-agent/tanstack'
 import { pageDocPayloadSchema } from '@chester-hill-solutions/cms-core'
-import { createCmsStore } from '@chester-hill-solutions/cms-server'
+import { createCmsStoreD1 } from '@chester-hill-solutions/cms-store-d1'
 
 import { defaultNewPageDoc, entryIdFromPageSlug, validateNewPageSlug } from './pageDocEntry'
 
@@ -20,7 +20,7 @@ function parsePayload(raw: unknown) {
  * Dedicated store instance for agent writes so revision rows are audited as
  * created_by 'agent' (the editor UI store keeps the default 'admin').
  */
-const agentStore = createCmsStore(() => ({ db: env.DB, media: env.MEDIA }), {
+const agentStore = createCmsStoreD1(() => ({ db: env.DB, media: env.MEDIA }), {
   parsePayload,
   newPageDoc: defaultNewPageDoc,
   validateNewPageSlug,

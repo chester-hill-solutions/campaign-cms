@@ -1,4 +1,4 @@
-import { type PageDocPayload } from './blockSchemas';
+import { type PageDocPayload } from './blockSchemas.js';
 export declare const DYNAMIC_PAGE_ENTRY_PREFIX: "page-";
 /** True for known fixed pageDoc entry ids and dynamically created `page-*` ids. */
 export declare function isPageDocEntryId(entryId: string, knownEntryIds: ReadonlySet<string>): boolean;

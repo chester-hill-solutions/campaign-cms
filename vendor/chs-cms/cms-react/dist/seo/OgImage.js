@@ -1,0 +1,4 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+export function OgImageTemplate({ title, description, siteName, }) {
+    return (_jsxs("svg", { xmlns: "http://www.w3.org/2000/svg", width: "1200", height: "630", viewBox: "0 0 1200 630", role: "img", "aria-label": `Open Graph image for ${title}`, children: [_jsx("rect", { width: "1200", height: "630", fill: "#111827" }), _jsx("rect", { x: "60", y: "60", width: "1080", height: "510", fill: "#1f2937", rx: "12" }), _jsx("text", { x: "100", y: "220", fill: "#f9fafb", fontFamily: "sans-serif", fontSize: "72", fontWeight: "bold", children: title }), description ? (_jsx("text", { x: "100", y: "320", fill: "#d1d5db", fontFamily: "sans-serif", fontSize: "40", children: description })) : null, siteName ? (_jsx("text", { x: "100", y: "500", fill: "#9ca3af", fontFamily: "sans-serif", fontSize: "32", children: siteName })) : null] }));
+}

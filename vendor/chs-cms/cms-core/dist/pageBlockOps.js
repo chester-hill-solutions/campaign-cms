@@ -1,5 +1,5 @@
-import { createBlockId } from './blockSchemas';
-import { createDefaultBlock } from './blockFactory';
+import { createBlockId } from './blockSchemas.js';
+import { createDefaultBlock } from './blockFactory.js';
 /** Insert a fresh default block at the given index. Returns the new block too. */
 export function insertBlockAt(content, type, index, defaults) {
     const block = createDefaultBlock(type, defaults);

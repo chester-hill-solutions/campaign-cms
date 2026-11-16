@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
-@source "../../../packages/cms-react/src";
+@source "../../../vendor/chs-cms/cms-react/dist";
 @import "@chester-hill-solutions/cms-react/styles/cms-tokens.css";
 
 @theme {

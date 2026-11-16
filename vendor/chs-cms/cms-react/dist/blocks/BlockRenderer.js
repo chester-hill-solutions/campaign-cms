@@ -65,6 +65,7 @@ export function renderBlockView(block, appContext, appBlocks) {
         case 'eventsTeaser':
         case 'bioLinks':
         case 'donateEmbed':
+        case 'collectionGrid':
             return renderAppBlock(block, appContext, appBlocks);
         default: {
             const _exhaustive = block;
@@ -73,8 +74,8 @@ export function renderBlockView(block, appContext, appBlocks) {
     }
 }
 export function BlockRenderer({ blocks, appContext, appBlocks, }) {
-    return (_jsx("div", { className: "@container w-full min-w-0 grid gap-2", children: blocks.map((block) => (_jsx("div", { className: blockLayoutClasses(block.layout), children: renderBlockView(block, appContext, appBlocks) }, block.id))) }));
+    return (_jsx("div", { className: "cms-blocks @container w-full min-w-0 grid grid-cols-1 gap-2", children: blocks.map((block) => (_jsx("div", { className: `cms-block ${blockLayoutClasses(block.layout)}`, "data-block-id": block.id, "data-block-type": block.type, "data-background": block.layout.background, "data-width": block.layout.width, "data-spacing": block.layout.spacing, "data-align": block.layout.align, "data-accent": block.layout.accent, children: renderBlockView(block, appContext, appBlocks) }, block.id))) }));
 }
 export function BlockPreview({ block, appContext, appBlocks, }) {
-    return (_jsx("div", { className: "@container w-full min-w-0", children: _jsx("div", { className: blockLayoutClasses(block.layout), children: renderBlockView(block, appContext, appBlocks) }) }));
+    return (_jsx("div", { className: "@container w-full min-w-0", children: _jsx("div", { className: `cms-block ${blockLayoutClasses(block.layout)}`, "data-block-id": block.id, "data-block-type": block.type, "data-background": block.layout.background, "data-width": block.layout.width, "data-spacing": block.layout.spacing, "data-align": block.layout.align, "data-accent": block.layout.accent, children: renderBlockView(block, appContext, appBlocks) }) }));
 }

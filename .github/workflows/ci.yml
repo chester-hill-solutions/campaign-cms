@@ -24,3 +24,11 @@ jobs:
 
       - name: Typecheck
         run: npm run typecheck
+
+      - name: Test host Worker and vendored provenance
+        run: npm test
+
+      - name: Build both examples
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+        run: npm run build
